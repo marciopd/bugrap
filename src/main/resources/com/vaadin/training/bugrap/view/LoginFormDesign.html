@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="design-properties" content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;GENERATE_GETTERS&quot;:false,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;mytheme&quot;}">
+  <meta name="vaadin-version" content="8.0.5">
+ </head>
+ <body>
+  <vaadin-vertical-layout size-full>
+   <vaadin-horizontal-layout width-full height="100px" :middle :center>
+    <vaadin-label style-name="h1 align-center" width-full plain-text :middle :center :expand>
+      Bugrap Login 
+    </vaadin-label>
+   </vaadin-horizontal-layout>
+   <vaadin-horizontal-layout size-full :middle :center :expand>
+    <vaadin-form-layout width="400px" height="350px" :center>
+     <vaadin-label style-name="error" width-full _id="errorLabel">
+       Label 
+     </vaadin-label>
+     <vaadin-text-field required-indicator-visible caption="Username:" maxlength="20" _id="usernameText"></vaadin-text-field>
+     <vaadin-password-field required-indicator-visible caption="Password:" maxlength="20" _id="passwordText"></vaadin-password-field>
+     <vaadin-horizontal-layout>
+      <vaadin-button style-name="primary" plain-text _id="loginButton">
+        Login 
+      </vaadin-button>
+      <vaadin-button plain-text _id="clearButton">
+        Clear 
+      </vaadin-button>
+     </vaadin-horizontal-layout>
+    </vaadin-form-layout>
+   </vaadin-horizontal-layout>
+  </vaadin-vertical-layout>
+ </body>
+</html>
