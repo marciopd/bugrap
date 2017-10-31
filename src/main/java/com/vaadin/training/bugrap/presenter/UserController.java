@@ -6,6 +6,7 @@ import com.vaadin.server.VaadinSession;
 
 public class UserController {
 
+	private static final String EMPTY_STRING = "";
 	private final static UserController INSTANCE = new UserController();
 
 	private UserController() {
@@ -32,5 +33,14 @@ public class UserController {
 
 	public void logout() {
 		VaadinSession.getCurrent().setAttribute(SessionAttributes.USER, null);
+
+	}
+
+	public String getUsername() {
+		final Reporter user = getUser();
+		if (user == null) {
+			return EMPTY_STRING;
+		}
+		return user.getName();
 	}
 }

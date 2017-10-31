@@ -6,18 +6,21 @@
   <meta name="vaadin-version" content="8.0.5">
  </head>
  <body>
-  <vaadin-vertical-layout size-full>
-   <vaadin-horizontal-layout width-full height="30px" :middle>
-    <vaadin-native-select width-full data-item-type="java.lang.String" _id="projectSelect" :expand>
-     <option item="Option1">Option 1</option>
-     <option item="Option2">Option 2</option>
-     <option item="Option3">Option 3</option>
-    </vaadin-native-select>
-    <vaadin-label icon="fonticon://Vaadin-Icons/e80d" caption="username" style-name="borderright" width="100px" plain-text _id="userName" :middle :right :expand></vaadin-label>
-    <vaadin-label icon="fonticon://Vaadin-Icons/e6ac" caption="Logout" width="80px" plain-text :middle :right></vaadin-label>
+  <vaadin-vertical-split-panel width="1024px" height="848px">
+   <vaadin-horizontal-layout spacing="false" width-full height="405px" margin>
+    <vaadin-horizontal-layout spacing="false" width-full height="35px" :expand>
+     <vaadin-combo-box style-name="borderless large" width-full data-item-type="java.lang.String" _id="projectSelect" :expand>
+      <option item="Option1">Option 1</option>
+      <option item="Option2">Option 2</option>
+      <option item="Option3">Option 3</option>
+     </vaadin-combo-box>
+     <vaadin-label icon="fonticon://Vaadin-Icons/e80d" caption="username" style-name="username" width="360px" plain-text _id="username" :middle :right :expand></vaadin-label>
+     <vaadin-button icon="fonticon://Vaadin-Icons/e798" style-name="link logout" width="100px" plain-text _id="logoutButton" :middle :right>
+       Logout 
+     </vaadin-button>
+    </vaadin-horizontal-layout>
    </vaadin-horizontal-layout>
    <vaadin-horizontal-layout width-full></vaadin-horizontal-layout>
-   <vaadin-horizontal-layout size-full :expand></vaadin-horizontal-layout>
-  </vaadin-vertical-layout>
+  </vaadin-vertical-split-panel>
  </body>
 </html>
