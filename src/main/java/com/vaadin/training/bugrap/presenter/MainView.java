@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.vaadin.bugrap.domain.entities.Project;
 
@@ -33,7 +34,7 @@ public class MainView extends MainViewDesign implements View {
 			sendRedirectHome();
 		});
 
-		final List<Project> projects = new ArrayList<>(BugrapFacade.getInstance().findProjects());
+		final Set<Project> projects = BugrapFacade.getInstance().findProjects();
 		projectSelect.setItems(getProjectNames(projects));
 	}
 
@@ -45,7 +46,7 @@ public class MainView extends MainViewDesign implements View {
 		}
 	}
 
-	private Collection<String> getProjectNames(final List<Project> projects) {
+	private Collection<String> getProjectNames(final Collection<Project> projects) {
 		final List<String> names = new ArrayList<>();
 		for (final Project project : projects) {
 			names.add(project.getName());
