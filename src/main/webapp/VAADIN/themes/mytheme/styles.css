@@ -1769,6 +1769,152 @@ div.v-layout.v-horizontal.v-widget {
 	width: 100%;
 }
 
+.mytheme .search-dropdown {
+	position: relative;
+	padding: 4px 9px 4px 36px;
+	border-radius: 4px;
+	background: white;
+	border: 1px solid #c5c5c5;
+	box-shadow: inset 0 1px 0 #f7f7f7, 0 1px 0 rgba(255, 255, 255, 0.1);
+	transition: box-shadow 180ms, border 180ms;
+	width: 185px;
+	height: 37px;
+}
+
+.mytheme .search-dropdown.on-focus {
+	border-color: #197de1;
+	box-shadow: 0 0 0 2px rgba(25, 125, 255, 0.5);
+}
+
+.mytheme .search-dropdown .search-dropdown-field {
+	border: 0;
+	outline: 0;
+	width: 100%;
+	box-sizing: border-box;
+	margin: 0;
+	font: inherit;
+	font-weight: 400;
+	line-height: normal;
+	background: white;
+	color: #474747;
+}
+
+.mytheme .search-dropdown .search-dropdown-icon {
+	position: absolute;
+	top: 2px;
+	left: 4px;
+	width: 28px;
+	height: 28px;
+}
+
+.mytheme .search-dropdown .search-dropdown-icon:after {
+	position: absolute;
+	line-height: 28px;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	text-align: center;
+	display: block;
+	font-family: "Vaadin-Icons";
+	content: "\E805";
+	color: black;
+}
+
+.mytheme .search-dropdown.loading-suggestions .search-dropdown-icon {
+	animation: v-rotate-360 2s linear infinite;
+	transform-origin: 50% 50%;
+}
+
+.mytheme .search-dropdown.loading-suggestions .search-dropdown-icon:before {
+	position: absolute;
+	line-height: 28px;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	text-align: center;
+	display: block;
+	display: block;
+	font-family: "Vaadin-Icons";
+	color: #197de1;
+	content: "\e75c";
+}
+
+.mytheme .search-dropdown.loading-suggestions .search-dropdown-icon:after {
+	color: #CCC;
+	content: "\e6d2";
+}
+
+.mytheme .search-dropdown .search-dropdown-clear {
+	display: none;
+}
+
+.mytheme .search-dropdown.with-clear {
+	padding-right: 28px;
+}
+
+.mytheme .search-dropdown.with-clear .search-dropdown-clear {
+	display: block;
+	position: absolute;
+	right: 0px;
+	top: 2px;
+	height: 28px;
+	width: 28px;
+	line-height: 28px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.mytheme .search-dropdown.with-clear .search-dropdown-clear:before {
+	display: block;
+	font-family: "Vaadin-Icons";
+	content: "\e911";
+	color: black;
+}
+
+.mytheme .search-dropdown-popup .search-dropdown-menu {
+	border-radius: 4px;
+	background-color: white;
+	color: #474747;
+	box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1), 0 3px 5px 0 rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.09);
+	backface-visibility: hidden;
+	padding: 4px 4px;
+	box-sizing: border-box;
+	position: relative;
+	z-index: 1;
+	display: block;
+}
+
+.mytheme .search-dropdown-popup .search-dropdown-menu TABLE, .mytheme .search-dropdown-popup .search-dropdown-menu TBODY, .mytheme .search-dropdown-popup .search-dropdown-menu TR, .mytheme .search-dropdown-popup .search-dropdown-menu TD {
+	display: block;
+	width: 100%;
+	overflow-y: hidden;
+	float: left;
+	clear: both;
+}
+
+.mytheme .search-dropdown-popup .search-dropdown-menu .gwt-MenuItem {
+	width: 100%;
+	cursor: pointer;
+	line-height: 27px;
+	padding: 0 20px 0 10px;
+	border-radius: 3px;
+	font-weight: 400;
+	white-space: nowrap;
+	position: relative;
+	height: 27px;
+	box-sizing: border-box;
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+}
+
+.mytheme .search-dropdown-popup .search-dropdown-menu .gwt-MenuItem-selected {
+	background-color: #197de1;
+	color: #ecf2f8;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
+}
+
 .mytheme.v-app, .mytheme.v-app-loading {
 	font: 300 16px/1.55 "Open Sans", sans-serif;
 	color: #464646;
@@ -14977,4 +15123,8 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme .v-caption-badge .v-captiontext {
 	margin-top: 5px;
+}
+
+.mytheme .v-slot-reportBugLabel {
+	width: auto !important;
 }
