@@ -43,11 +43,13 @@
     height: 25px!important;
     padding-top: 5px;
   }
-  
-  .v-slot-username .v-icon, .v-slot-logout .v-icon {
-  	font-size: 18px;
+
+  .v-slot-username .v-icon, .v-slot-logout .v-icon, .v-slot-reportBugLabel  .v-icon,
+  .v-slot-requestFeatureLabel .v-icon, .v-slot-manageProjectLabel .v-icon
+  {
+	font-size: 18px;
   }
-  
+
   div.v-caption-username {
     text-align: right;
     padding-right: 15px;
@@ -62,9 +64,36 @@
     font-size: 14px;
     font-weight: 400 !important;
   }
-  
+ 
   div.v-slot-logout .v-button-link {
   	text-decoration: none;
   	color: inherit;
+  }
+
+  .v-slot-requestFeatureLabel {
+  	width: auto !important;
+    border-right: 1px solid gray;
+    height: 25px!important;
+  }
+  
+  .v-slot-reportBugLabel {
+  	width: auto !important;
+  }
+  
+  .v-slot-manageProjectLabel {
+  	width: auto !important;
+  }
+
+  .v-caption-badge  {
+	background: gray;
+	color: white;
+	width: auto;
+	text-align: center;
+	border-radius: 45%;
+	box-shadow: 0 0 1px #333;
+  }
+  
+  .v-caption-badge .v-captiontext {
+  	margin-top: 5px;
   }
 }

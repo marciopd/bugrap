@@ -8,13 +8,21 @@
  <body>
   <vaadin-vertical-split-panel width="1024px" height="848px">
    <vaadin-horizontal-layout spacing="false" width-full height="405px" margin>
-    <vaadin-horizontal-layout spacing="false" width-full height="35px" :expand>
-     <vaadin-combo-box style-name="borderless large" width-full data-item-type="org.vaadin.bugrap.domain.entities.Project" _id="projectSelect" :expand></vaadin-combo-box>
-     <vaadin-label icon="fonticon://Vaadin-Icons/e80d" caption="username" style-name="username" width="360px" plain-text _id="username" :middle :right :expand></vaadin-label>
-     <vaadin-button icon="fonticon://Vaadin-Icons/e798" style-name="link logout" width="100px" plain-text _id="logoutButton" :middle :right>
-       Logout 
-     </vaadin-button>
-    </vaadin-horizontal-layout>
+    <vaadin-vertical-layout margin="false">
+     <vaadin-horizontal-layout spacing="false" width-full height="35px">
+      <vaadin-combo-box style-name="borderless large" width-full data-item-type="org.vaadin.bugrap.domain.entities.Project" _id="projectSelect" :expand></vaadin-combo-box>
+      <vaadin-label icon="fonticon://Vaadin-Icons/e80d" caption="username" style-name="username" width="360px" plain-text _id="username" :middle :right :expand></vaadin-label>
+      <vaadin-button icon="fonticon://Vaadin-Icons/e798" style-name="link logout" width="100px" plain-text _id="logoutButton" :middle :right>
+        Logout 
+      </vaadin-button>
+     </vaadin-horizontal-layout>
+     <vaadin-horizontal-layout width-full height="25px">
+      <vaadin-label icon="fonticon://Vaadin-Icons/e68b" caption="Report a bug" style-name="reportBugLabel" width="120px"></vaadin-label>
+      <vaadin-label icon="fonticon://Vaadin-Icons/e6ae" caption="Request a feature" style-name="requestFeatureLabel" width="150px" plain-text></vaadin-label>
+      <vaadin-label icon="fonticon://Vaadin-Icons/e7d3" caption="Manage project" style-name="manageProjectLabel" width="125px" plain-text></vaadin-label>
+      <vaadin-label caption="123" style-name="badge" width="50px" plain-text></vaadin-label>
+     </vaadin-horizontal-layout>
+    </vaadin-vertical-layout>
    </vaadin-horizontal-layout>
    <vaadin-horizontal-layout width-full></vaadin-horizontal-layout>
   </vaadin-vertical-split-panel>

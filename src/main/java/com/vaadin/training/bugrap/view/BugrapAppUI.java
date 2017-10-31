@@ -33,8 +33,8 @@ public class BugrapAppUI extends UI {
 	protected void init(final VaadinRequest vaadinRequest) {
 
 		final Navigator navigator = new Navigator(this, this);
-		navigator.addView(Views.LOGIN, new LoginForm());
-		navigator.addView(Views.MAIN, new MainView());
+		navigator.addView(Views.LOGIN, LoginForm.class);
+		navigator.addView(Views.MAIN, MainView.class);
 
 		if (UserController.getInstance().isUserLoggedIn()) {
 			navigator.navigateTo(Views.MAIN);
