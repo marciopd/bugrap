@@ -15128,3 +15128,11 @@ div.v-layout.v-horizontal.v-widget {
 .mytheme .v-slot-reportBugLabel {
 	width: auto !important;
 }
+
+.mytheme .headerSecondLine {
+	border-bottom: 1px solid #c5c5c5;
+}
+
+.mytheme .v-caption-reportsFor span {
+	font-size: medium;
+}

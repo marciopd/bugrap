@@ -1,4 +1,4 @@
-package com.vaadin.training.bugrap.view;
+package com.vaadin.training.bugrap.ui;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.annotation.WebServlet;
@@ -9,9 +9,9 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.training.bugrap.model.BugrapFacade;
-import com.vaadin.training.bugrap.presenter.LoginForm;
-import com.vaadin.training.bugrap.presenter.MainView;
-import com.vaadin.training.bugrap.presenter.UserController;
+import com.vaadin.training.bugrap.scope.Scope;
+import com.vaadin.training.bugrap.scope.ScopeHolder;
+import com.vaadin.training.bugrap.scope.UIScope;
 import com.vaadin.ui.UI;
 
 /**
@@ -24,14 +24,24 @@ import com.vaadin.ui.UI;
  * initialize non-component functionality.
  */
 @Theme("mytheme")
-public class BugrapAppUI extends UI {
+public class BugrapAppUI extends UI implements ScopeHolder {
 
 	/** serial. */
 	private static final long serialVersionUID = 6297796943026028324L;
 
+	private final UIScope scope = new UIScope();
+
 	@Override
 	protected void init(final VaadinRequest vaadinRequest) {
+		initializeModel();
+		initializeViews();
+	}
 
+	private void initializeModel() {
+		scope.setProperty(Models.BUGRAP_MODEL, new BugrapApplicationModel());
+	}
+
+	private void initializeViews() {
 		final Navigator navigator = new Navigator(this, this);
 		navigator.addView(Views.LOGIN, LoginForm.class);
 		navigator.addView(Views.MAIN, MainView.class);
@@ -41,7 +51,6 @@ public class BugrapAppUI extends UI {
 		} else {
 			navigator.navigateTo(Views.LOGIN);
 		}
-
 	}
 
 	@WebServlet(urlPatterns = "/*", name = "BugrapUIServlet", asyncSupported = true)
@@ -56,4 +65,10 @@ public class BugrapAppUI extends UI {
 		}
 
 	}
+
+	@Override
+	public Scope getScope() {
+		return scope;
+	}
+
 }

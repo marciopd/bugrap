@@ -100,4 +100,12 @@
   .v-slot-reportBugLabel {
   	width: auto !important;
   }
+  
+  .headerSecondLine {
+    border-bottom: 1px solid #c5c5c5;
+  }
+  
+  .v-caption-reportsFor span {
+    font-size: medium;
+  }
 }

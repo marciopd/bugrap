@@ -1,4 +1,4 @@
-package com.vaadin.training.bugrap.view;
+package com.vaadin.training.bugrap.ui;
 
 public final class Views {
 

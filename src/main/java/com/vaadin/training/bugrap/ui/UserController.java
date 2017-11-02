@@ -1,4 +1,4 @@
-package com.vaadin.training.bugrap.presenter;
+package com.vaadin.training.bugrap.ui;
 
 import org.vaadin.bugrap.domain.entities.Reporter;
 

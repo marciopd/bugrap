@@ -1,4 +1,4 @@
-package com.vaadin.training.bugrap.presenter;
+package com.vaadin.training.bugrap.ui;
 
 import org.vaadin.bugrap.domain.entities.Reporter;
 
@@ -6,8 +6,6 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.training.bugrap.model.BugrapFacade;
-import com.vaadin.training.bugrap.view.LoginFormDesign;
-import com.vaadin.training.bugrap.view.Views;
 import com.vaadin.ui.Notification;
 
 public class LoginForm extends LoginFormDesign implements View {
