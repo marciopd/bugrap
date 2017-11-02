@@ -8,7 +8,7 @@
  </head>
  <body>
   <vaadin-vertical-split-panel width="1024px" height="1048px">
-   <vaadin-vertical-layout height="140px" margin="false">
+   <vaadin-vertical-layout size-full margin="false">
     <vaadin-horizontal-layout spacing="false" width-full height="40px" margin-left>
      <vaadin-combo-box scroll-to-selected-item empty-selection-allowed="false" style-name="borderless large" text-input-allowed="false" width-full data-item-type="org.vaadin.bugrap.domain.entities.Project" _id="projectSelect" :expand></vaadin-combo-box>
      <vaadin-label icon="fonticon://Vaadin-Icons/e80d" caption="username" style-name="username" width="250px" plain-text _id="username" :middle :right :expand></vaadin-label>
@@ -27,6 +27,7 @@
       <vaadin-combo-box scroll-to-selected-item caption="Reports for" style-name="borderless reportsFor" text-input-allowed="false" empty-selection-caption="All versions" data-item-type="org.vaadin.bugrap.domain.entities.ProjectVersion" _id="projectVersionsSelect"></vaadin-combo-box>
      </vaadin-form-layout>
     </vaadin-horizontal-layout>
+    <vaadin-horizontal-layout size-full _id="reportsGridLayout" :expand></vaadin-horizontal-layout>
    </vaadin-vertical-layout>
    <vaadin-horizontal-layout size-full margin>
     <vaadin-vertical-layout height="412px" margin="false" :expand></vaadin-vertical-layout>

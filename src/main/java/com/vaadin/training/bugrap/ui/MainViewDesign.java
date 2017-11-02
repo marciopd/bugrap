@@ -26,6 +26,7 @@ public class MainViewDesign extends VerticalSplitPanel {
 	protected Button logoutButton;
 	protected HorizontalLayout headerSecondLine;
 	protected ComboBox<org.vaadin.bugrap.domain.entities.ProjectVersion> projectVersionsSelect;
+	protected HorizontalLayout reportsGridLayout;
 
 	public MainViewDesign() {
 		Design.read(this);

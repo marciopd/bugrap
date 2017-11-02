@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.vaadin.bugrap.domain.BugrapRepository.ReportsQuery;
 import org.vaadin.bugrap.domain.entities.Project;
 import org.vaadin.bugrap.domain.entities.ProjectVersion;
+import org.vaadin.bugrap.domain.entities.Report;
 
 import com.vaadin.training.bugrap.eventbus.UIEventBus;
 import com.vaadin.training.bugrap.model.BugrapFacade;
@@ -52,6 +54,18 @@ public class BugrapApplicationModel {
 				BugrapFacade.getInstance().findProjectVersions(project));
 		Collections.sort(projectVersions);
 		return projectVersions;
+	}
+
+	public List<Report> listReports() {
+		final ReportsQuery query = new ReportsQuery();
+		query.project = project;
+		query.projectVersion = projectVersion;
+
+		return new ArrayList<>(BugrapFacade.getInstance().findReports(query));
+	}
+
+	public boolean isAllVersionsSelected() {
+		return projectVersion == null;
 	}
 
 }
