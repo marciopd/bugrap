@@ -1,17 +1,14 @@
 package com.vaadin.training.bugrap.ui;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.vaadin.alump.searchdropdown.SimpleSearchDropDown;
 import org.vaadin.bugrap.domain.entities.Project;
-import org.vaadin.bugrap.domain.entities.ProjectVersion;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.training.bugrap.eventbus.UIEventBus;
-import com.vaadin.training.bugrap.model.BugrapFacade;
 import com.vaadin.training.bugrap.scope.UIScope;
 import com.vaadin.training.bugrap.ui.events.ProjectChangedEvent;
 
@@ -43,12 +40,10 @@ public class MainView extends MainViewDesign implements View {
 	}
 
 	private void findProjectVersionsAndSelectEmpty() {
-		final List<ProjectVersion> projectVersions = new ArrayList<>(
-				BugrapFacade.getInstance().findProjectVersions(getApplicationModel().getProject()));
-		Collections.sort(projectVersions);
 		projectVersionsSelect.setValue(null);
-		projectVersionsSelect.setItems(projectVersions);
-		getApplicationModel().setProjectVersion(null);
+		final BugrapApplicationModel applicationModel = getApplicationModel();
+		projectVersionsSelect.setItems(applicationModel.listProjectVersions());
+		applicationModel.setProjectVersion(null);
 	}
 
 	private BugrapApplicationModel getApplicationModel() {
@@ -56,14 +51,14 @@ public class MainView extends MainViewDesign implements View {
 	}
 
 	private void initProjectSelect() {
-		final List<Project> projects = new ArrayList<>(BugrapFacade.getInstance().findProjects());
-		Collections.sort(projects);
+		final BugrapApplicationModel applicationModel = getApplicationModel();
+		final List<Project> projects = applicationModel.listProjects();
 		projectSelect.setItems(projects);
 		projectSelect.addSelectionListener(event -> {
-			getApplicationModel().setProject(event.getValue());
+			applicationModel.setProject(event.getValue());
 		});
-		getApplicationModel().setProject(projects.get(FIRST));
-		projectSelect.setValue(getApplicationModel().getProject());
+		applicationModel.setProject(projects.get(FIRST));
+		projectSelect.setValue(applicationModel.getProject());
 	}
 
 	private void initSearchReportsDropdown() {
