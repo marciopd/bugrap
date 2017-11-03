@@ -23,11 +23,13 @@
      <vaadin-label caption="123" style-name="badge" width="50px" plain-text></vaadin-label>
     </vaadin-horizontal-layout>
     <vaadin-horizontal-layout width-full height="40px" margin-left>
-     <vaadin-form-layout size-auto margin="false" :middle>
+     <vaadin-form-layout height="40px" margin="false" :middle>
       <vaadin-combo-box scroll-to-selected-item caption="Reports for" style-name="borderless reportsFor" text-input-allowed="false" empty-selection-caption="All versions" data-item-type="org.vaadin.bugrap.domain.entities.ProjectVersion" _id="projectVersionsSelect"></vaadin-combo-box>
      </vaadin-form-layout>
     </vaadin-horizontal-layout>
-    <vaadin-horizontal-layout size-full _id="reportsGridLayout" :expand></vaadin-horizontal-layout>
+    <vaadin-horizontal-layout size-full _id="reportsGridLayout" :expand>
+     <vaadin-grid size-full data-item-type="org.vaadin.bugrap.domain.entities.Report" _id="reportsGrid" :expand></vaadin-grid>
+    </vaadin-horizontal-layout>
    </vaadin-vertical-layout>
    <vaadin-horizontal-layout size-full margin>
     <vaadin-vertical-layout height="412px" margin="false" :expand></vaadin-vertical-layout>

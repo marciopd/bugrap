@@ -17,7 +17,6 @@ import com.vaadin.training.bugrap.eventbus.UIEventBus;
 import com.vaadin.training.bugrap.scope.UIScope;
 import com.vaadin.training.bugrap.ui.events.ProjectChangedEvent;
 import com.vaadin.training.bugrap.ui.events.ProjectVersionChangedEvent;
-import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 
 public class MainView extends MainViewDesign implements View {
@@ -25,8 +24,6 @@ public class MainView extends MainViewDesign implements View {
 	private static final long serialVersionUID = 6316325087699578693L;
 	private static final float SEARCH_REPORTS_DROPDOWN_WIDTH = 340f;
 	private static final int FIRST = 0;
-
-	private Grid<Report> reportsGrid = new Grid<>();
 
 	@Override
 	public void enter(final ViewChangeEvent event) {
@@ -54,18 +51,15 @@ public class MainView extends MainViewDesign implements View {
 
 	private void initReportsGrid() {
 
-		reportsGridLayout.removeComponent(reportsGrid);
-
 		final BugrapApplicationModel applicationModel = getApplicationModel();
 		final List<Report> reports = applicationModel.listReports();
 
 		if (!reports.isEmpty()) {
-			reportsGrid = new Grid<Report>();
+			reportsGrid.removeAllColumns();
 			reportsGrid.setSizeFull();
 			reportsGrid.setItems(reports);
 
 			final GridSortOrderBuilder<Report> sortOrderBuilder = new GridSortOrderBuilder<>();
-
 			if (applicationModel.isAllVersionsSelected()) {
 				final Column<Report, ProjectVersion> projectVersionColumn = reportsGrid.addColumn(Report::getVersion).setCaption("VERSION");
 				sortOrderBuilder.thenAsc(projectVersionColumn);
@@ -80,8 +74,10 @@ public class MainView extends MainViewDesign implements View {
 			reportsGrid.addColumn(Report::getReportedTimestamp).setCaption("REPORTED");
 
 			reportsGrid.setSortOrder(sortOrderBuilder);
+			reportsGrid.setVisible(true);
 
-			reportsGridLayout.addComponent(reportsGrid);
+		} else {
+			reportsGrid.setVisible(false);
 		}
 
 	}
