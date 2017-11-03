@@ -5,12 +5,19 @@ import java.util.List;
 
 import org.vaadin.alump.searchdropdown.SimpleSearchDropDown;
 import org.vaadin.bugrap.domain.entities.Project;
+import org.vaadin.bugrap.domain.entities.ProjectVersion;
+import org.vaadin.bugrap.domain.entities.Report;
+import org.vaadin.bugrap.domain.entities.Report.Priority;
 
+import com.vaadin.data.provider.GridSortOrderBuilder;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.training.bugrap.eventbus.EventBus;
 import com.vaadin.training.bugrap.eventbus.UIEventBus;
 import com.vaadin.training.bugrap.scope.UIScope;
 import com.vaadin.training.bugrap.ui.events.ProjectChangedEvent;
+import com.vaadin.training.bugrap.ui.events.ProjectVersionChangedEvent;
+import com.vaadin.ui.Grid.Column;
 
 public class MainView extends MainViewDesign implements View {
 
@@ -31,19 +38,59 @@ public class MainView extends MainViewDesign implements View {
 		initProjectSelect();
 		initSearchReportsDropdown();
 		initProjectVersions();
+		initReportsGrid();
+
+		subscribeToEvents();
+	}
+
+	private void subscribeToEvents() {
+		final EventBus eventBus = UIEventBus.getInstance();
+		eventBus.subscribe(ProjectChangedEvent.class, this::receiveProjectChangedEvent);
+		eventBus.subscribe(ProjectVersionChangedEvent.class, this::receiveVersionChangedEvent);
+	}
+
+	private void initReportsGrid() {
+
+		final BugrapApplicationModel applicationModel = getApplicationModel();
+		final List<Report> reports = applicationModel.listReports();
+
+		if (!reports.isEmpty()) {
+			reportsGrid.removeAllColumns();
+			reportsGrid.setSizeFull();
+			reportsGrid.setItems(reports);
+
+			final GridSortOrderBuilder<Report> sortOrderBuilder = new GridSortOrderBuilder<>();
+			if (applicationModel.isAllVersionsSelected()) {
+				final Column<Report, ProjectVersion> projectVersionColumn = reportsGrid.addColumn(Report::getVersion).setCaption("VERSION");
+				sortOrderBuilder.thenAsc(projectVersionColumn);
+			}
+
+			final Column<Report, Priority> priorityColumn = reportsGrid.addColumn(Report::getPriority).setCaption("PRIORITY");
+			sortOrderBuilder.thenDesc(priorityColumn);
+			reportsGrid.addColumn(Report::getType).setCaption("TYPE");
+			reportsGrid.addColumn(Report::getSummary).setCaption("SUMMARY");
+			reportsGrid.addColumn(Report::getAssigned).setCaption("ASSIGNED TO");
+			reportsGrid.addColumn(Report::getTimestamp).setCaption("LAST MODIFIED");
+			reportsGrid.addColumn(Report::getReportedTimestamp).setCaption("REPORTED");
+
+			reportsGrid.setSortOrder(sortOrderBuilder);
+			reportsGrid.setVisible(true);
+
+		} else {
+			reportsGrid.setVisible(false);
+		}
 
 	}
 
 	private void initProjectVersions() {
-		findProjectVersionsAndSelectEmpty();
-		UIEventBus.getInstance().subscribe(ProjectChangedEvent.class, this::receive);
-	}
-
-	private void findProjectVersionsAndSelectEmpty() {
 		projectVersionsSelect.setValue(null);
 		final BugrapApplicationModel applicationModel = getApplicationModel();
 		projectVersionsSelect.setItems(applicationModel.listProjectVersions());
 		applicationModel.setProjectVersion(null);
+
+		projectVersionsSelect.addSelectionListener(event -> {
+			applicationModel.setProjectVersion(event.getValue());
+		});
 	}
 
 	private BugrapApplicationModel getApplicationModel() {
@@ -71,8 +118,12 @@ public class MainView extends MainViewDesign implements View {
 		headerSecondLine.addComponent(searchReportsDropDown);
 	}
 
-	public void receive(final ProjectChangedEvent event) {
-		findProjectVersionsAndSelectEmpty();
+	public void receiveProjectChangedEvent(final ProjectChangedEvent event) {
+		initProjectVersions();
+		initReportsGrid();
 	}
 
+	public void receiveVersionChangedEvent(final ProjectVersionChangedEvent event) {
+		initReportsGrid();
+	}
 }
