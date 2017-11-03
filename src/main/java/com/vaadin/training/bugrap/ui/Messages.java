@@ -8,7 +8,6 @@ public final class Messages {
 	public static final String LOGIN_SUCCEEDED = "Welcome, %s!";
 	public static final String USER_ALREADY_LOGGED = "There´s already a user logged in.";
 	public static final String SEARCH_REPORTS = "Search reports...";
-	public static final String SELECT_FIELD = "Select ...";
 
 	private Messages() {
 	}

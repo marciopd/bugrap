@@ -69,9 +69,12 @@ public class MainView extends MainViewDesign implements View {
 			sortOrderBuilder.thenDesc(priorityColumn);
 			reportsGrid.addColumn(Report::getType).setCaption("TYPE");
 			reportsGrid.addColumn(Report::getSummary).setCaption("SUMMARY");
-			reportsGrid.addColumn(Report::getAssigned).setCaption("ASSIGNED TO");
-			reportsGrid.addColumn(Report::getTimestamp).setCaption("LAST MODIFIED");
-			reportsGrid.addColumn(Report::getReportedTimestamp).setCaption("REPORTED");
+			reportsGrid.addColumn(report -> applicationModel.getAssignedTo(report.getAssigned()))
+					.setCaption("ASSIGNED TO");
+			reportsGrid.addColumn(report -> applicationModel.getElapsedTimeFrom(report.getTimestamp()))
+					.setCaption("LAST MODIFIED");
+			reportsGrid.addColumn(report -> applicationModel.getElapsedTimeFrom(report.getReportedTimestamp()))
+					.setCaption("REPORTED");
 
 			reportsGrid.setSortOrder(sortOrderBuilder);
 			reportsGrid.setVisible(true);
