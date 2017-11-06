@@ -8,6 +8,7 @@ import org.vaadin.bugrap.domain.BugrapRepository.ReportsQuery;
 import org.vaadin.bugrap.domain.entities.Project;
 import org.vaadin.bugrap.domain.entities.ProjectVersion;
 import org.vaadin.bugrap.domain.entities.Report;
+import org.vaadin.bugrap.domain.entities.Reporter;
 
 import com.vaadin.training.bugrap.eventbus.UIEventBus;
 import com.vaadin.training.bugrap.model.BugrapFacade;
@@ -66,6 +67,13 @@ public class BugrapApplicationModel {
 
 	public boolean isAllVersionsSelected() {
 		return projectVersion == null;
+	}
+
+	public String getAssignedTo(final Reporter reporter) {
+		if (reporter == null) {
+			return null;
+		}
+		return reporter.getName();
 	}
 
 }
