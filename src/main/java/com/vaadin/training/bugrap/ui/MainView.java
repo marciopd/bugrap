@@ -17,6 +17,7 @@ import com.vaadin.training.bugrap.eventbus.UIEventBus;
 import com.vaadin.training.bugrap.scope.UIScope;
 import com.vaadin.training.bugrap.ui.events.ProjectChangedEvent;
 import com.vaadin.training.bugrap.ui.events.ProjectVersionChangedEvent;
+import com.vaadin.training.bugrap.util.ElapsedTimeFormat;
 import com.vaadin.ui.Grid.Column;
 
 public class MainView extends MainViewDesign implements View {
@@ -71,9 +72,9 @@ public class MainView extends MainViewDesign implements View {
 			reportsGrid.addColumn(Report::getSummary).setCaption("SUMMARY");
 			reportsGrid.addColumn(report -> applicationModel.getAssignedTo(report.getAssigned()))
 					.setCaption("ASSIGNED TO");
-			reportsGrid.addColumn(report -> applicationModel.getElapsedTimeFrom(report.getTimestamp()))
+			reportsGrid.addColumn(report -> ElapsedTimeFormat.format(report.getTimestamp()))
 					.setCaption("LAST MODIFIED");
-			reportsGrid.addColumn(report -> applicationModel.getElapsedTimeFrom(report.getReportedTimestamp()))
+			reportsGrid.addColumn(report -> ElapsedTimeFormat.format(report.getReportedTimestamp()))
 					.setCaption("REPORTED");
 
 			reportsGrid.setSortOrder(sortOrderBuilder);
