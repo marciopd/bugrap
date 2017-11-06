@@ -1,8 +1,13 @@
 package com.vaadin.training.bugrap.util;
 
+import java.util.logging.Logger;
+
 import org.vaadin.bugrap.domain.entities.Report.Priority;
 
 public class PriorityFormat {
+
+	private static final Logger LOGGER = Logger.getLogger(PriorityFormat.class.getName());
+	private static final String MSG_UNKOWN_PRIORITY = "Unkown priority to format: '%s'.";
 
 	private static final PriorityFormat INSTANCE = new PriorityFormat();
 
@@ -50,6 +55,7 @@ public class PriorityFormat {
 			return CRITICAL_HTML;
 		}
 
+		LOGGER.warning(String.format(MSG_UNKOWN_PRIORITY, priority));
 		return null;
 	}
 
