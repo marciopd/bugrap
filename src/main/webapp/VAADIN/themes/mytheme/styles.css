@@ -15136,3 +15136,10 @@ div.v-layout.v-horizontal.v-widget {
 .mytheme .v-caption-reportsFor span {
 	font-size: medium;
 }
+
+.mytheme .priority-bar {
+	background-color: gray;
+	height: 25px;
+	width: 5px;
+	margin-right: 2px;
+}

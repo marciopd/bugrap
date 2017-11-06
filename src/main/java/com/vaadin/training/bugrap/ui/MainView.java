@@ -7,7 +7,6 @@ import org.vaadin.alump.searchdropdown.SimpleSearchDropDown;
 import org.vaadin.bugrap.domain.entities.Project;
 import org.vaadin.bugrap.domain.entities.ProjectVersion;
 import org.vaadin.bugrap.domain.entities.Report;
-import org.vaadin.bugrap.domain.entities.Report.Priority;
 
 import com.vaadin.data.provider.GridSortOrderBuilder;
 import com.vaadin.navigator.View;
@@ -18,7 +17,9 @@ import com.vaadin.training.bugrap.scope.UIScope;
 import com.vaadin.training.bugrap.ui.events.ProjectChangedEvent;
 import com.vaadin.training.bugrap.ui.events.ProjectVersionChangedEvent;
 import com.vaadin.training.bugrap.util.ElapsedTimeFormat;
+import com.vaadin.training.bugrap.util.PriorityFormat;
 import com.vaadin.ui.Grid.Column;
+import com.vaadin.ui.renderers.HtmlRenderer;
 
 public class MainView extends MainViewDesign implements View {
 
@@ -66,7 +67,9 @@ public class MainView extends MainViewDesign implements View {
 				sortOrderBuilder.thenAsc(projectVersionColumn);
 			}
 
-			final Column<Report, Priority> priorityColumn = reportsGrid.addColumn(Report::getPriority).setCaption("PRIORITY");
+			final Column<Report, String> priorityColumn = reportsGrid
+					.addColumn(report -> PriorityFormat.getInstance().format(report.getPriority()), new HtmlRenderer())
+					.setCaption("PRIORITY");
 			sortOrderBuilder.thenDesc(priorityColumn);
 			reportsGrid.addColumn(Report::getType).setCaption("TYPE");
 			reportsGrid.addColumn(Report::getSummary).setCaption("SUMMARY");
