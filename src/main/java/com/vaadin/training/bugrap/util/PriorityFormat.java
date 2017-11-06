@@ -7,12 +7,20 @@ public class PriorityFormat {
 	private static final PriorityFormat INSTANCE = new PriorityFormat();
 
 	private static final String PRIORITY_BAR_HTML = "<div class=\"priority-bar\"></div>";
+
 	private static final int ONE = 1;
 	private static final int TWO = 2;
 	private static final int THREE = 3;
 	private static final int FOUR = 4;
 	private static final int FIVE = 5;
 	private static final int SIX = 6;
+
+	private static final String TRIVIAL_HTML = repeat(ONE, PRIORITY_BAR_HTML);
+	private static final String MINOR_HTML = repeat(TWO, PRIORITY_BAR_HTML);
+	private static final String NORMAL_HTML = repeat(THREE, PRIORITY_BAR_HTML);
+	private static final String MAJOR_HTML = repeat(FOUR, PRIORITY_BAR_HTML);
+	private static final String BLOCKER_HTML = repeat(FIVE, PRIORITY_BAR_HTML);
+	private static final String CRITICAL_HTML = repeat(SIX, PRIORITY_BAR_HTML);
 
 	private PriorityFormat() {
 	}
@@ -27,43 +35,30 @@ public class PriorityFormat {
 			return null;
 		}
 
-		final StringBuilder sb = new StringBuilder();
 		switch (priority) {
 		case TRIVIAL:
-			append(sb, ONE, PRIORITY_BAR_HTML);
-			break;
-
+			return TRIVIAL_HTML;
 		case MINOR:
-			append(sb, TWO, PRIORITY_BAR_HTML);
-			break;
-
+			return MINOR_HTML;
 		case NORMAL:
-			append(sb, THREE, PRIORITY_BAR_HTML);
-			break;
-
+			return NORMAL_HTML;
 		case MAJOR:
-			append(sb, FOUR, PRIORITY_BAR_HTML);
-			break;
-
+			return MAJOR_HTML;
 		case BLOCKER:
-			append(sb, FIVE, PRIORITY_BAR_HTML);
-			break;
-
+			return BLOCKER_HTML;
 		case CRITICAL:
-			append(sb, SIX, PRIORITY_BAR_HTML);
-			break;
-
-		default:
-			break;
+			return CRITICAL_HTML;
 		}
 
-		return sb.toString();
+		return null;
 	}
 
-	private void append(final StringBuilder sb, final int numberTimes, final String appendString) {
+	private static String repeat(final int numberTimes, final String stringToRepeat) {
+		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < numberTimes; i++) {
-			sb.append(appendString);
+			sb.append(stringToRepeat);
 		}
+		return sb.toString();
 	}
 
 }
