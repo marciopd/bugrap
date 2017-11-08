@@ -81,9 +81,9 @@ public class BugrapApplicationModel {
 		}
 
 		if (selectedReports.size() == ONE) {
-			setSingleModificationMode(reports.iterator().next());
+			setSingleModificationMode(selectedReports.iterator().next());
 		} else {
-			setMassModificationMode(reports);
+			setMassModificationMode(selectedReports);
 		}
 	}
 
