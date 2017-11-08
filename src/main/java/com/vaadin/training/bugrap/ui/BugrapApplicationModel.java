@@ -2,9 +2,14 @@ package com.vaadin.training.bugrap.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.vaadin.bugrap.domain.BugrapRepository.ReportsQuery;
 import org.vaadin.bugrap.domain.entities.Project;
@@ -24,6 +29,8 @@ import com.vaadin.training.bugrap.ui.events.ReportUpdatedEvent;
 
 public class BugrapApplicationModel {
 
+	private static final int ONE = 1;
+	private static final String MASS_MODE_REPORT_TITLE = "%d reports selected";
 	private static final List<Status> STATUS_LIST = Arrays.asList(Status.values());
 	private static final List<Type> REPORT_TYPE_LIST = Arrays.asList(Type.values());
 	private static final List<Priority> PRIORITY_LIST = Arrays.asList(Priority.values());
@@ -38,6 +45,8 @@ public class BugrapApplicationModel {
 	private Project project;
 	private ProjectVersion projectVersion;
 	private Report report;
+	private Set<Report> reports;
+	private Report massModificationReport;
 
 	public Project getProject() {
 		return project;
@@ -58,12 +67,44 @@ public class BugrapApplicationModel {
 	}
 
 	public Report getReport() {
-		return report;
+		if (isSingleModificationModeSelected()) {
+			return report;
+		}
+
+		return massModificationReport;
 	}
 
-	public void setReport(final Report report) {
+	public void setSelectedReports(final Set<Report> selectedReports) {
+		if (selectedReports == null || selectedReports.isEmpty()) {
+			setReport(null);
+			return;
+		}
+
+		if (selectedReports.size() == ONE) {
+			setReport(reports.iterator().next());
+		} else {
+			setReports(reports);
+		}
+	}
+
+	private void setReport(final Report report) {
 		this.report = report;
+		this.reports = null;
+		this.massModificationReport = null;
 		UIEventBus.getInstance().publish(new ReportSelectedEvent(report));
+	}
+
+	private void setReports(final Set<Report> reports) {
+		this.reports = reports;
+		report = null;
+		massModificationReport = new Report();
+		massModificationReport.setSummary(String.format(MASS_MODE_REPORT_TITLE, reports.size()));
+		setPropertyIfUniqueValue(reports, Report::getPriority, massModificationReport::setPriority);
+		setPropertyIfUniqueValue(reports, Report::getType, massModificationReport::setType);
+		setPropertyIfUniqueValue(reports, Report::getStatus, massModificationReport::setStatus);
+		setPropertyIfUniqueValue(reports, Report::getAssigned, massModificationReport::setAssigned);
+		setPropertyIfUniqueValue(reports, Report::getVersion, massModificationReport::setVersion);
+		UIEventBus.getInstance().publish(new ReportSelectedEvent(massModificationReport));
 	}
 
 	public List<Project> listProjects() {
@@ -103,8 +144,12 @@ public class BugrapApplicationModel {
 		return reporter.getName();
 	}
 
-	public boolean isSingleReportSelected() {
+	public boolean isSingleModificationModeSelected() {
 		return report != null;
+	}
+
+	public boolean isMassModificationModeSelected() {
+		return reports != null;
 	}
 
 	public List<Priority> listPriorities() {
@@ -126,8 +171,46 @@ public class BugrapApplicationModel {
 	}
 
 	public void updateSelectedReport() {
-		BugrapFacade.getInstance().save(report);
-		UIEventBus.getInstance().publish(new ReportUpdatedEvent(report));
+		if (isSingleModificationModeSelected()) {
+			BugrapFacade.getInstance().save(report);
+			UIEventBus.getInstance().publish(new ReportUpdatedEvent(report));
+		} else {
+			for (final Report report : reports) {
+				setPropertyIfNotNull(massModificationReport::getPriority, report::setPriority);
+				setPropertyIfNotNull(massModificationReport::getType, report::setType);
+				setPropertyIfNotNull(massModificationReport::getStatus, report::setStatus);
+				setPropertyIfNotNull(massModificationReport::getAssigned, report::setAssigned);
+				setPropertyIfNotNull(massModificationReport::getVersion, report::setVersion);
+				BugrapFacade.getInstance().save(report);
+			}
+			UIEventBus.getInstance().publish(new ReportUpdatedEvent(massModificationReport));
+		}
+	}
+
+	public boolean isShowReportView() {
+		return isSingleModificationModeSelected() || isMassModificationModeSelected();
+	}
+
+	private <R> void setPropertyIfUniqueValue(final Collection<Report> reports,
+			final Function<Report, R> propertyGetter, final Consumer<R> propertySetter) {
+
+		final R sameResult = propertyGetter.apply(reports.iterator().next());
+
+		for (final Report report : reports) {
+			final R result = propertyGetter.apply(report);
+			if (sameResult != result && (sameResult == null || result == null || !sameResult.equals(result))) {
+				return;
+			}
+		}
+
+		propertySetter.accept(sameResult);
+	}
+
+	private <R> void setPropertyIfNotNull(final Supplier<R> propertyGetter, final Consumer<R> propertySetter) {
+		final R value = propertyGetter.get();
+		if (value != null) {
+			propertySetter.accept(value);
+		}
 	}
 
 }

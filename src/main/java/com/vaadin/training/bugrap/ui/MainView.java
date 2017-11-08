@@ -88,7 +88,7 @@ public class MainView extends MainViewDesign implements View {
 			reportsGrid.setSortOrder(sortOrderBuilder);
 
 			reportsGrid.addSelectionListener(event -> {
-				applicationModel.setReport(event.getFirstSelectedItem().orElse(null));
+				applicationModel.setSelectedReports(event.getAllSelectedItems());
 			});
 
 			reportsGrid.setVisible(true);
@@ -139,7 +139,7 @@ public class MainView extends MainViewDesign implements View {
 		reportView.setVisible(false);
 
 		final BugrapApplicationModel applicationModel = getApplicationModel();
-		if (applicationModel.isSingleReportSelected()) {
+		if (applicationModel.isShowReportView()) {
 			reportView.initialize();
 			reportView.setVisible(true);
 		}
