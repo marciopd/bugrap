@@ -76,25 +76,25 @@ public class BugrapApplicationModel {
 
 	public void setSelectedReports(final Set<Report> selectedReports) {
 		if (selectedReports == null || selectedReports.isEmpty()) {
-			setReport(null);
+			setSingleModificationMode(null);
 			return;
 		}
 
 		if (selectedReports.size() == ONE) {
-			setReport(reports.iterator().next());
+			setSingleModificationMode(reports.iterator().next());
 		} else {
-			setReports(reports);
+			setMassModificationMode(reports);
 		}
 	}
 
-	private void setReport(final Report report) {
+	private void setSingleModificationMode(final Report report) {
 		this.report = report;
 		this.reports = null;
 		this.massModificationReport = null;
 		UIEventBus.getInstance().publish(new ReportSelectedEvent(report));
 	}
 
-	private void setReports(final Set<Report> reports) {
+	private void setMassModificationMode(final Set<Report> reports) {
 		this.reports = reports;
 		report = null;
 		massModificationReport = new Report();
