@@ -34,6 +34,7 @@ public class ReportView extends ReportViewDesign implements View {
 			openNewWindowButton.setVisible(false);
 			commentsLabel.setVisible(false);
 		} else {
+			openNewWindowButton.setVisible(true);
 			initComments(report);
 		}
 
