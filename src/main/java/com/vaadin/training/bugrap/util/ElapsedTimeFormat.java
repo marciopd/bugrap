@@ -13,7 +13,7 @@ public class ElapsedTimeFormat {
 	private static final String LABEL_SECONDS_AGO = " seconds ago";
 	private static final String LABEL_MINUTES_AGO = " minutes ago";
 	private static final String LABEL_HOURS_AGO = " hours ago";
-	private static final String LABEL_DAYS_AGO = "days ago";
+	private static final String LABEL_DAYS_AGO = " days ago";
 	private static final String LABEL_WEEKS_AGO = " weeks ago";
 	private static final String LABEL_MONTHS_AGO = " months ago";
 	private static final String LABEL_YEARS_AGO = " years ago";

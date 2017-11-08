@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="design-properties" content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;GENERATE_GETTERS&quot;:false,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;mytheme&quot;}">
+  <meta name="vaadin-version" content="8.0.5">
+ </head>
+ <body>
+  <vaadin-vertical-layout spacing="false" width="1024px" height-full margin="false">
+   <vaadin-vertical-layout style-name="report-header" height="115px" margin-left="false" margin-top="false" margin-bottom="false">
+    <vaadin-horizontal-layout width-full height="30px" :middle>
+     <vaadin-button icon="fonticon://Vaadin-Icons/e7de" style-name="small icon-only link" plain-text icon-alt="Open in new window"></vaadin-button>
+     <vaadin-label style-name="bold report-summary-label" width="500px" height="30px" plain-text _id="reportSummaryLabel" :expand>
+       Report summary 
+     </vaadin-label>
+    </vaadin-horizontal-layout>
+    <vaadin-horizontal-layout width-full height="65px" :expand>
+     <vaadin-native-select caption="PRIORITY" empty-selection-allowed="false" data-item-type="org.vaadin.bugrap.domain.entities.Report.Priority" _id="prioritySelect"></vaadin-native-select>
+     <vaadin-native-select caption="BUG" empty-selection-allowed="false" data-item-type="org.vaadin.bugrap.domain.entities.Report.Type" _id="bugSelect"></vaadin-native-select>
+     <vaadin-native-select caption="STATUS" empty-selection-allowed="false" width="210px" data-item-type="org.vaadin.bugrap.domain.entities.Report.Status" _id="statusSelect"></vaadin-native-select>
+     <vaadin-native-select caption="ASSIGNED TO" empty-selection-allowed="false" width="210px" data-item-type="org.vaadin.bugrap.domain.entities.Reporter" _id="assignedToSelect"></vaadin-native-select>
+     <vaadin-native-select caption="VERSION" empty-selection-allowed="false" width="100px" data-item-type="org.vaadin.bugrap.domain.entities.ProjectVersion" _id="versionSelect"></vaadin-native-select>
+     <vaadin-horizontal-layout width="200px" height-full :middle :expand>
+      <vaadin-button style-name="primary" plain-text _id="updateButton" :middle>
+        Update 
+      </vaadin-button>
+      <vaadin-button style-name="small" plain-text _id="revertButton" :middle>
+        Revert 
+      </vaadin-button>
+     </vaadin-horizontal-layout>
+    </vaadin-horizontal-layout>
+   </vaadin-vertical-layout>
+   <vaadin-panel style-name="comments-panel" size-full :expand>
+    <vaadin-label style-name="comments-label" size-full _id="commentsLabel">
+      HTML Comments... 
+    </vaadin-label>
+   </vaadin-panel>
+  </vaadin-vertical-layout>
+ </body>
+</html>

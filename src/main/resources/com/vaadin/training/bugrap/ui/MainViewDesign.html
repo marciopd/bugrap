@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="design-properties" content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;GENERATE_GETTERS&quot;:false,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;mytheme&quot;}">
   <meta name="vaadin-version" content="8.0.5">
+  <meta name="package-mapping" content="com_vaadin_training_bugrap_ui:com.vaadin.training.bugrap.ui">
   <meta name="package-mapping" content="org_vaadin_alump_searchdropdown:org.vaadin.alump.searchdropdown">
  </head>
  <body>
-  <vaadin-vertical-split-panel width="1024px" height="1048px">
+  <vaadin-vertical-split-panel style-name="large" width="1024px" height="1024px" split-position="578px">
    <vaadin-vertical-layout size-full margin="false">
     <vaadin-horizontal-layout spacing="false" width-full height="40px" margin-left>
      <vaadin-combo-box scroll-to-selected-item empty-selection-allowed="false" style-name="borderless large" text-input-allowed="false" width-full data-item-type="org.vaadin.bugrap.domain.entities.Project" _id="projectSelect" :expand></vaadin-combo-box>
@@ -31,9 +32,9 @@
      <vaadin-grid size-full data-item-type="org.vaadin.bugrap.domain.entities.Report" _id="reportsGrid" :expand></vaadin-grid>
     </vaadin-horizontal-layout>
    </vaadin-vertical-layout>
-   <vaadin-horizontal-layout size-full margin>
-    <vaadin-vertical-layout height="412px" margin="false" :expand></vaadin-vertical-layout>
-   </vaadin-horizontal-layout>
+   <vaadin-vertical-layout spacing="false" size-full margin="false">
+    <com_vaadin_training_bugrap_ui-report-view size-full _id="reportView" :expand></com_vaadin_training_bugrap_ui-report-view>
+   </vaadin-vertical-layout>
   </vaadin-vertical-split-panel>
  </body>
 </html>

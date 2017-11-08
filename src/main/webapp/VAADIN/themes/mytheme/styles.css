@@ -15143,3 +15143,33 @@ div.v-layout.v-horizontal.v-widget {
 	width: 5px;
 	margin-right: 2px;
 }
+
+.mytheme .report-header {
+	padding-top: 15px;
+	padding-left: 15px;
+	background-color: lightgray;
+	border-bottom: 1px solid gray;
+}
+
+.mytheme .comment {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.mytheme .comment:first-child {
+	background-color: lightgray;
+}
+
+.mytheme .report-summary-label {
+	padding-top: 4px;
+}
+
+.mytheme .author-name-label {
+	color: gray;
+}
+
+.mytheme .report-description {
+	margin-left: 25px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
