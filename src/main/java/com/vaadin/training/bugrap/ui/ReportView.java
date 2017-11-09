@@ -5,23 +5,18 @@ import org.vaadin.bugrap.domain.entities.Reporter;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.training.bugrap.scope.UIScope;
 import com.vaadin.training.bugrap.util.CommentFormat;
-import com.vaadin.ui.Button.ClickListener;
 
-public class ReportView extends ReportViewDesign implements View {
+public class ReportView extends ReportViewDesign {
 
 	private static final long serialVersionUID = 1790972443114757675L;
 
 	private Binder<Report> reportBinder;
-	private ClickListener updateButtonListener;
-	private ClickListener revertButtonListener;
 
-	@Override
-	public void enter(final ViewChangeEvent event) {
-		initialize();
+	public ReportView() {
+		initUpdateButton();
+		initRevertButton();
 	}
 
 	public void initialize() {
@@ -40,9 +35,6 @@ public class ReportView extends ReportViewDesign implements View {
 
 		initComboBoxes(applicationModel);
 		initReportBinder(report);
-
-		initUpdateButton();
-		initRevertButton();
 	}
 
 	private void initComboBoxes(final BugrapApplicationModel applicationModel) {
@@ -70,26 +62,20 @@ public class ReportView extends ReportViewDesign implements View {
 	}
 
 	private void initRevertButton() {
-		if (revertButtonListener == null) {
-			revertButtonListener = event -> {
-				reportBinder.readBean(getApplicationModel().getReport());
-			};
-		}
-		revertButton.addClickListener(revertButtonListener);
+		revertButton.addClickListener(event -> {
+			reportBinder.readBean(getApplicationModel().getReport());
+		});
 	}
 
 	private void initUpdateButton() {
-		if (updateButtonListener == null) {
-			updateButtonListener = event -> {
-				try {
-					reportBinder.writeBean(getApplicationModel().getReport());
-				} catch (final ValidationException e) {
-					throw new IllegalStateException("Unexpected validation error.", e);
-				}
-				getApplicationModel().updateSelectedReport();
-			};
-			updateButton.addClickListener(updateButtonListener);
-		}
+		updateButton.addClickListener(event -> {
+			try {
+				reportBinder.writeBean(getApplicationModel().getReport());
+			} catch (final ValidationException e) {
+				throw new IllegalStateException("Unexpected validation error.", e);
+			}
+			getApplicationModel().updateSelectedReport();
+		});
 	}
 
 	private void initReportBinder(final Report report) {
