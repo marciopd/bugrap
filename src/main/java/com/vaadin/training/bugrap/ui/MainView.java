@@ -16,6 +16,8 @@ import com.vaadin.training.bugrap.eventbus.UIEventBus;
 import com.vaadin.training.bugrap.scope.UIScope;
 import com.vaadin.training.bugrap.ui.events.ProjectChangedEvent;
 import com.vaadin.training.bugrap.ui.events.ProjectVersionChangedEvent;
+import com.vaadin.training.bugrap.ui.events.ReportSelectedEvent;
+import com.vaadin.training.bugrap.ui.events.ReportUpdatedEvent;
 import com.vaadin.training.bugrap.util.ElapsedTimeFormat;
 import com.vaadin.training.bugrap.util.PriorityFormat;
 import com.vaadin.ui.Grid.Column;
@@ -41,6 +43,7 @@ public class MainView extends MainViewDesign implements View {
 		initSearchReportsDropdown();
 		initProjectVersions();
 		initReportsGrid();
+		initReportView();
 
 		subscribeToEvents();
 	}
@@ -49,6 +52,8 @@ public class MainView extends MainViewDesign implements View {
 		final EventBus eventBus = UIEventBus.getInstance();
 		eventBus.subscribe(ProjectChangedEvent.class, this::receiveProjectChangedEvent);
 		eventBus.subscribe(ProjectVersionChangedEvent.class, this::receiveVersionChangedEvent);
+		eventBus.subscribe(ReportSelectedEvent.class, this::receiveReportSelectedEvent);
+		eventBus.subscribe(ReportUpdatedEvent.class, this::receiveReportUpdatedEvent);
 	}
 
 	private void initReportsGrid() {
@@ -81,6 +86,11 @@ public class MainView extends MainViewDesign implements View {
 					.setCaption("REPORTED");
 
 			reportsGrid.setSortOrder(sortOrderBuilder);
+
+			reportsGrid.addSelectionListener(event -> {
+				applicationModel.setReport(event.getFirstSelectedItem().orElse(null));
+			});
+
 			reportsGrid.setVisible(true);
 
 		} else {
@@ -125,12 +135,30 @@ public class MainView extends MainViewDesign implements View {
 		headerSecondLine.addComponent(searchReportsDropDown);
 	}
 
+	private void initReportView() {
+		reportView.setVisible(false);
+
+		final BugrapApplicationModel applicationModel = getApplicationModel();
+		if (applicationModel.isSingleReportSelected()) {
+			reportView.initialize();
+			reportView.setVisible(true);
+		}
+	}
+
 	public void receiveProjectChangedEvent(final ProjectChangedEvent event) {
 		initProjectVersions();
 		initReportsGrid();
 	}
 
 	public void receiveVersionChangedEvent(final ProjectVersionChangedEvent event) {
+		initReportsGrid();
+	}
+
+	public void receiveReportSelectedEvent(final ReportSelectedEvent reportSelectedEvent) {
+		initReportView();
+	}
+
+	public void receiveReportUpdatedEvent(final ReportUpdatedEvent event) {
 		initReportsGrid();
 	}
 }
