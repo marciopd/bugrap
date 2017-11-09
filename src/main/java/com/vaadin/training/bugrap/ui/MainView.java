@@ -17,7 +17,7 @@ import com.vaadin.training.bugrap.scope.UIScope;
 import com.vaadin.training.bugrap.ui.events.ProjectChangedEvent;
 import com.vaadin.training.bugrap.ui.events.ProjectVersionChangedEvent;
 import com.vaadin.training.bugrap.ui.events.ReportSelectedEvent;
-import com.vaadin.training.bugrap.ui.events.ReportUpdatedEvent;
+import com.vaadin.training.bugrap.ui.events.ReportsUpdatedEvent;
 import com.vaadin.training.bugrap.util.ElapsedTimeFormat;
 import com.vaadin.training.bugrap.util.PriorityFormat;
 import com.vaadin.ui.Grid.Column;
@@ -53,7 +53,7 @@ public class MainView extends MainViewDesign implements View {
 		eventBus.subscribe(ProjectChangedEvent.class, this::receiveProjectChangedEvent);
 		eventBus.subscribe(ProjectVersionChangedEvent.class, this::receiveVersionChangedEvent);
 		eventBus.subscribe(ReportSelectedEvent.class, this::receiveReportSelectedEvent);
-		eventBus.subscribe(ReportUpdatedEvent.class, this::receiveReportUpdatedEvent);
+		eventBus.subscribe(ReportsUpdatedEvent.class, this::receiveReportUpdatedEvent);
 	}
 
 	private void initReportsGrid() {
@@ -158,7 +158,7 @@ public class MainView extends MainViewDesign implements View {
 		initReportView();
 	}
 
-	public void receiveReportUpdatedEvent(final ReportUpdatedEvent event) {
+	public void receiveReportUpdatedEvent(final ReportsUpdatedEvent event) {
 		initReportsGrid();
 	}
 }

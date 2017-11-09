@@ -25,7 +25,7 @@ import com.vaadin.training.bugrap.model.BugrapFacade;
 import com.vaadin.training.bugrap.ui.events.ProjectChangedEvent;
 import com.vaadin.training.bugrap.ui.events.ProjectVersionChangedEvent;
 import com.vaadin.training.bugrap.ui.events.ReportSelectedEvent;
-import com.vaadin.training.bugrap.ui.events.ReportUpdatedEvent;
+import com.vaadin.training.bugrap.ui.events.ReportsUpdatedEvent;
 
 public class BugrapApplicationModel {
 
@@ -173,7 +173,7 @@ public class BugrapApplicationModel {
 	public void updateSelectedReport() {
 		if (isSingleModificationModeSelected()) {
 			BugrapFacade.getInstance().save(report);
-			UIEventBus.getInstance().publish(new ReportUpdatedEvent(report));
+			UIEventBus.getInstance().publish(new ReportsUpdatedEvent(report));
 		} else {
 			for (final Report report : reports) {
 				setPropertyIfNotNull(massModificationReport::getPriority, report::setPriority);
@@ -183,7 +183,7 @@ public class BugrapApplicationModel {
 				setPropertyIfNotNull(massModificationReport::getVersion, report::setVersion);
 				BugrapFacade.getInstance().save(report);
 			}
-			UIEventBus.getInstance().publish(new ReportUpdatedEvent(massModificationReport));
+			UIEventBus.getInstance().publish(new ReportsUpdatedEvent(reports));
 		}
 	}
 
