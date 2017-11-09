@@ -21,14 +21,19 @@ public class ReportView extends ReportViewDesign {
 
 	public void initialize() {
 		final BugrapApplicationModel applicationModel = getApplicationModel();
-		final Report report = applicationModel.getReport();
 
+		final Report report = applicationModel.getReport();
 		reportSummaryLabel.setValue(report.getSummary());
 
+		if (applicationModel.isMassModificationModeSelected()) {
+			openNewWindowButton.setVisible(false);
+			commentsLabel.setVisible(false);
+		} else {
+			openNewWindowButton.setVisible(true);
+			initComments(report);
+		}
+
 		initComboBoxes(applicationModel);
-
-		initComments(report);
-
 		initReportBinder(report);
 	}
 
@@ -53,6 +58,7 @@ public class ReportView extends ReportViewDesign {
 		final String reportDescriptionComment = CommentFormat.format(getName(report.getAuthor()), report.getReportedTimestamp(),
 				report.getDescription());
 		commentsLabel.setValue(reportDescriptionComment);
+		commentsLabel.setVisible(true);
 	}
 
 	private void initRevertButton() {
@@ -66,7 +72,7 @@ public class ReportView extends ReportViewDesign {
 			try {
 				reportBinder.writeBean(getApplicationModel().getReport());
 			} catch (final ValidationException e) {
-				throw new IllegalStateException("Unexpected validation error ocurred.", e);
+				throw new IllegalStateException("Unexpected validation error.", e);
 			}
 			getApplicationModel().updateSelectedReport();
 		});

@@ -10,6 +10,7 @@ import java.util.Date;
 
 public class ElapsedTimeFormat {
 
+	private static final String EMPTY_STRING = "";
 	private static final String LABEL_SECONDS_AGO = " seconds ago";
 	private static final String LABEL_MINUTES_AGO = " minutes ago";
 	private static final String LABEL_HOURS_AGO = " hours ago";
@@ -24,6 +25,10 @@ public class ElapsedTimeFormat {
 	private static final String LABEL_JUST_NOW = " just now";
 
 	public static String format(final Date timestamp) {
+
+		if (timestamp == null) {
+			return EMPTY_STRING;
+		}
 
 		final Instant timestampInstant = Instant.ofEpochMilli(timestamp.getTime());
 		final Instant now = Instant.now();
