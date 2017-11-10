@@ -6,11 +6,12 @@ import org.vaadin.bugrap.domain.entities.Reporter;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.training.bugrap.scope.UIScope;
-import com.vaadin.training.bugrap.util.CommentFormat;
+import com.vaadin.training.bugrap.ui.component.Comment;
 
 public class ReportView extends ReportViewDesign {
 
 	private static final long serialVersionUID = 1790972443114757675L;
+	private static final String FIRST_COMMENT_STYLE = "first-comment";
 
 	private Binder<Report> reportBinder;
 
@@ -27,7 +28,7 @@ public class ReportView extends ReportViewDesign {
 
 		if (applicationModel.isMassModificationModeSelected()) {
 			openNewWindowButton.setVisible(false);
-			commentsLabel.setVisible(false);
+			commentsPanel.setVisible(false);
 		} else {
 			openNewWindowButton.setVisible(true);
 			initComments(report);
@@ -55,10 +56,14 @@ public class ReportView extends ReportViewDesign {
 	}
 
 	private void initComments(final Report report) {
-		final String reportDescriptionComment = CommentFormat.format(getName(report.getAuthor()), report.getReportedTimestamp(),
+		commentsLayout.removeAllComponents();
+
+		final Comment reportDescriptionComment = new Comment(getName(report.getAuthor()), report.getReportedTimestamp(),
 				report.getDescription());
-		commentsLabel.setValue(reportDescriptionComment);
-		commentsLabel.setVisible(true);
+		reportDescriptionComment.addStyleName(FIRST_COMMENT_STYLE);
+		commentsLayout.addComponent(reportDescriptionComment);
+
+		commentsPanel.setVisible(true);
 	}
 
 	private void initRevertButton() {

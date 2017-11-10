@@ -15154,9 +15154,14 @@ div.v-layout.v-horizontal.v-widget {
 .mytheme .comment {
 	padding-left: 15px;
 	padding-right: 15px;
+	border-bottom: 1px solid gray;
 }
 
-.mytheme .comment:first-child {
+.mytheme .comment {
+	padding-top: 5px;
+}
+
+.mytheme .first-comment {
 	background-color: lightgray;
 }
 
@@ -15169,7 +15174,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .report-description {
-	margin-left: 25px;
-	padding-top: 5px;
-	padding-bottom: 5px;
+	margin-top: -15px;
+	padding-left: 25px;
+	padding-bottom: 10px;
 }
