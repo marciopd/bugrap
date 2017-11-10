@@ -1,4 +1,4 @@
-package com.vaadin.training.bugrap.ui;
+package com.vaadin.training.bugrap.ui.view;
 
 import org.vaadin.bugrap.domain.entities.Reporter;
 
@@ -6,6 +6,8 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.training.bugrap.model.BugrapFacade;
+import com.vaadin.training.bugrap.ui.model.Messages;
+import com.vaadin.training.bugrap.ui.model.UserModel;
 import com.vaadin.ui.Notification;
 
 public class LoginForm extends LoginFormDesign implements View {
@@ -64,7 +66,7 @@ public class LoginForm extends LoginFormDesign implements View {
 	private void loginSucceeded(final Reporter reporter) {
 		final String welcomeMessage = String.format(Messages.LOGIN_SUCCEEDED, reporter.getName());
 		Notification.show(welcomeMessage, Notification.Type.HUMANIZED_MESSAGE);
-		UserController.getInstance().setUser(reporter);
+		UserModel.getInstance().setUser(reporter);
 		resetValueAllFields();
 		getUI().getNavigator().navigateTo(Views.MAIN);
 	}

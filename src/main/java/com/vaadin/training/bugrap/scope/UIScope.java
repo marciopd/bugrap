@@ -1,11 +1,14 @@
 package com.vaadin.training.bugrap.scope;
 
+import java.io.Serializable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import com.vaadin.ui.UI;
 
-public class UIScope implements Scope {
+public class UIScope implements Scope, Serializable {
+
+	private static final long serialVersionUID = -4197202796244336413L;
 
 	private final ConcurrentMap<String, Object> properties = new ConcurrentHashMap<>();
 

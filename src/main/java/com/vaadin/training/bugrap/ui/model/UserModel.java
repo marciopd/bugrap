@@ -1,18 +1,18 @@
-package com.vaadin.training.bugrap.ui;
+package com.vaadin.training.bugrap.ui.model;
 
 import org.vaadin.bugrap.domain.entities.Reporter;
 
 import com.vaadin.server.VaadinSession;
 
-public class UserController {
+public class UserModel {
 
 	private static final String EMPTY_STRING = "";
-	private final static UserController INSTANCE = new UserController();
+	private final static UserModel INSTANCE = new UserModel();
 
-	private UserController() {
+	private UserModel() {
 	}
 
-	public static UserController getInstance() {
+	public static UserModel getInstance() {
 		return INSTANCE;
 	}
 
