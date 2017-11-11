@@ -105,7 +105,6 @@ public class MainView extends MainViewDesign implements View {
 		projectVersionsSelect.setValue(null);
 		final MainViewModel applicationModel = getApplicationModel();
 		projectVersionsSelect.setItems(applicationModel.listProjectVersions());
-		applicationModel.setProjectVersion(null);
 
 		projectVersionsSelect.addSelectionListener(event -> {
 			applicationModel.setProjectVersion(event.getValue());
@@ -138,20 +137,22 @@ public class MainView extends MainViewDesign implements View {
 	}
 
 	private void initReportView() {
-		reportView.setVisible(false);
 		reportView.initialize();
 	}
 
 	public void receiveProjectChangedEvent(final ProjectChangedEvent event) {
 		initProjectVersions();
 		initReportsGrid();
+		initReportView();
 	}
 
 	public void receiveVersionChangedEvent(final ProjectVersionChangedEvent event) {
 		initReportsGrid();
+		initReportView();
 	}
 
 	public void receiveReportUpdatedEvent(final ReportsUpdatedEvent event) {
 		initReportsGrid();
+		initReportView();
 	}
 }

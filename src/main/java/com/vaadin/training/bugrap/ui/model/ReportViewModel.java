@@ -19,8 +19,11 @@ import org.vaadin.bugrap.domain.entities.Report.Status;
 import org.vaadin.bugrap.domain.entities.Report.Type;
 import org.vaadin.bugrap.domain.entities.Reporter;
 
+import com.vaadin.training.bugrap.eventbus.EventBus;
 import com.vaadin.training.bugrap.eventbus.UIEventBus;
 import com.vaadin.training.bugrap.model.BugrapFacade;
+import com.vaadin.training.bugrap.ui.events.ProjectChangedEvent;
+import com.vaadin.training.bugrap.ui.events.ProjectVersionChangedEvent;
 import com.vaadin.training.bugrap.ui.events.ReportsSelectedEvent;
 import com.vaadin.training.bugrap.ui.events.ReportsUpdatedEvent;
 
@@ -44,11 +47,22 @@ public class ReportViewModel {
 	private Report massModificationReport;
 
 	public ReportViewModel() {
-		UIEventBus.getInstance().subscribe(ReportsSelectedEvent.class, this::receiveReportsSelectedEvent);
+		final EventBus eventBus = UIEventBus.getInstance();
+		eventBus.subscribe(ProjectChangedEvent.class, this::receiveProjectChangedEvent);
+		eventBus.subscribe(ProjectVersionChangedEvent.class, this::receiveVersionChangedEvent);
+		eventBus.subscribe(ReportsSelectedEvent.class, this::receiveReportsSelectedEvent);
 	}
 
 	public void receiveReportsSelectedEvent(final ReportsSelectedEvent event) {
 		setSelectedReports(event.getReports());
+	}
+
+	public void receiveProjectChangedEvent(final ProjectChangedEvent event) {
+		setSelectedReports(null);
+	}
+
+	public void receiveVersionChangedEvent(final ProjectVersionChangedEvent event) {
+		setSelectedReports(null);
 	}
 
 	public Report getReport() {
@@ -99,6 +113,7 @@ public class ReportViewModel {
 		this.reports = reports;
 		report = null;
 		massModificationReport = new Report();
+		massModificationReport.setProject(reports.iterator().next().getProject());
 		massModificationReport.setSummary(String.format(MASS_MODE_REPORT_TITLE, reports.size()));
 		setPropertyIfUniqueValue(reports, Report::getPriority, massModificationReport::setPriority);
 		setPropertyIfUniqueValue(reports, Report::getType, massModificationReport::setType);
@@ -117,12 +132,12 @@ public class ReportViewModel {
 
 	public List<ProjectVersion> listProjectVersions() {
 
-		if (report == null) {
+		if (getReport() == null) {
 			return Collections.emptyList();
 		}
 
 		final List<ProjectVersion> projectVersions = new ArrayList<>(
-				BugrapFacade.getInstance().findProjectVersions(report.getProject()));
+				BugrapFacade.getInstance().findProjectVersions(getReport().getProject()));
 		Collections.sort(projectVersions);
 		return projectVersions;
 	}

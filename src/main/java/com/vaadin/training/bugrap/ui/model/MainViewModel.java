@@ -28,6 +28,7 @@ public class MainViewModel {
 
 	public void setProject(final Project project) {
 		this.project = project;
+		this.projectVersion = null;
 		UIEventBus.getInstance().publish(new ProjectChangedEvent(project));
 	}
 
