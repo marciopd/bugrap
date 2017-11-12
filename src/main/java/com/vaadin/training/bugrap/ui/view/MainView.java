@@ -137,7 +137,7 @@ public class MainView extends MainViewDesign implements View {
 	}
 
 	private void initReportView() {
-		reportView.initialize();
+		reportPanel.initialize();
 	}
 
 	public void receiveProjectChangedEvent(final ProjectChangedEvent event) {

@@ -13,7 +13,7 @@ public class ReportsOverview extends ReportsOverviewDesign implements View {
 
 	@Override
 	public void enter(final ViewChangeEvent event) {
-		reportView.setReportFromRequestParam();
+		reportPanel.setReportFromRequestParam();
 	}
 
 }

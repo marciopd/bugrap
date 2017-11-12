@@ -14,7 +14,7 @@ import com.vaadin.training.bugrap.ui.events.ReportsSelectedEvent;
 import com.vaadin.training.bugrap.ui.model.Models;
 import com.vaadin.training.bugrap.ui.model.ReportViewModel;
 
-public class ReportView extends ReportViewDesign {
+public class ReportPanel extends ReportPanelDesign {
 
 	private static final long serialVersionUID = 1790972443114757675L;
 	private static final String REPORT_ID_PARAM = "reportId";
@@ -22,7 +22,7 @@ public class ReportView extends ReportViewDesign {
 
 	private Binder<Report> reportBinder;
 
-	public ReportView() {
+	public ReportPanel() {
 		initUpdateButton();
 		initRevertButton();
 		initOpenWindowButton();
