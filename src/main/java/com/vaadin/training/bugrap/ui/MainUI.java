@@ -12,6 +12,13 @@ import com.vaadin.training.bugrap.model.BugrapFacade;
 import com.vaadin.training.bugrap.scope.Scope;
 import com.vaadin.training.bugrap.scope.ScopeHolder;
 import com.vaadin.training.bugrap.scope.UIScope;
+import com.vaadin.training.bugrap.ui.model.MainViewModel;
+import com.vaadin.training.bugrap.ui.model.Models;
+import com.vaadin.training.bugrap.ui.model.ReportViewModel;
+import com.vaadin.training.bugrap.ui.model.UserModel;
+import com.vaadin.training.bugrap.ui.view.LoginForm;
+import com.vaadin.training.bugrap.ui.view.MainView;
+import com.vaadin.training.bugrap.ui.view.Views;
 import com.vaadin.ui.UI;
 
 /**
@@ -24,7 +31,7 @@ import com.vaadin.ui.UI;
  * initialize non-component functionality.
  */
 @Theme("mytheme")
-public class BugrapAppUI extends UI implements ScopeHolder {
+public class MainUI extends UI implements ScopeHolder {
 
 	/** serial. */
 	private static final long serialVersionUID = 6297796943026028324L;
@@ -38,7 +45,8 @@ public class BugrapAppUI extends UI implements ScopeHolder {
 	}
 
 	private void initializeModel() {
-		scope.setProperty(Models.BUGRAP_MODEL, new BugrapApplicationModel());
+		scope.setProperty(Models.MAIN_VIEW_MODEL, new MainViewModel());
+		scope.setProperty(Models.REPORT_VIEW_MODEL, new ReportViewModel());
 	}
 
 	private void initializeViews() {
@@ -46,15 +54,15 @@ public class BugrapAppUI extends UI implements ScopeHolder {
 		navigator.addView(Views.LOGIN, LoginForm.class);
 		navigator.addView(Views.MAIN, MainView.class);
 
-		if (UserController.getInstance().isUserLoggedIn()) {
+		if (UserModel.getInstance().isUserLoggedIn()) {
 			navigator.navigateTo(Views.MAIN);
 		} else {
 			navigator.navigateTo(Views.LOGIN);
 		}
 	}
 
-	@WebServlet(urlPatterns = "/*", name = "BugrapUIServlet", asyncSupported = true)
-	@VaadinServletConfiguration(ui = BugrapAppUI.class, productionMode = false)
+	@WebServlet(urlPatterns = "/*", name = "MainUIServlet", asyncSupported = true)
+	@VaadinServletConfiguration(ui = MainUI.class, productionMode = false)
 	public static class BugrapUIServlet extends VaadinServlet {
 
 		private static final long serialVersionUID = -7828539572500029539L;

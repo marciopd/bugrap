@@ -1,4 +1,4 @@
-package com.vaadin.training.bugrap.ui;
+package com.vaadin.training.bugrap.ui.model;
 
 public final class SessionAttributes {
 

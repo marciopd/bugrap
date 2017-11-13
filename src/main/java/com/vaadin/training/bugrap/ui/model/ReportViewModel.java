@@ -1,18 +1,17 @@
-package com.vaadin.training.bugrap.ui;
+package com.vaadin.training.bugrap.ui.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.vaadin.bugrap.domain.BugrapRepository.ReportsQuery;
-import org.vaadin.bugrap.domain.entities.Project;
 import org.vaadin.bugrap.domain.entities.ProjectVersion;
 import org.vaadin.bugrap.domain.entities.Report;
 import org.vaadin.bugrap.domain.entities.Report.Priority;
@@ -20,14 +19,15 @@ import org.vaadin.bugrap.domain.entities.Report.Status;
 import org.vaadin.bugrap.domain.entities.Report.Type;
 import org.vaadin.bugrap.domain.entities.Reporter;
 
+import com.vaadin.training.bugrap.eventbus.EventBus;
 import com.vaadin.training.bugrap.eventbus.UIEventBus;
 import com.vaadin.training.bugrap.model.BugrapFacade;
 import com.vaadin.training.bugrap.ui.events.ProjectChangedEvent;
 import com.vaadin.training.bugrap.ui.events.ProjectVersionChangedEvent;
-import com.vaadin.training.bugrap.ui.events.ReportSelectedEvent;
+import com.vaadin.training.bugrap.ui.events.ReportsSelectedEvent;
 import com.vaadin.training.bugrap.ui.events.ReportsUpdatedEvent;
 
-public class BugrapApplicationModel {
+public class ReportViewModel {
 
 	private static final int ONE = 1;
 	private static final String MASS_MODE_REPORT_TITLE = "%d reports selected";
@@ -42,28 +42,27 @@ public class BugrapApplicationModel {
 		}
 	};
 
-	private Project project;
-	private ProjectVersion projectVersion;
 	private Report report;
 	private Set<Report> reports;
 	private Report massModificationReport;
 
-	public Project getProject() {
-		return project;
+	public ReportViewModel() {
+		final EventBus eventBus = UIEventBus.getInstance();
+		eventBus.subscribe(ProjectChangedEvent.class, this::receiveProjectChangedEvent);
+		eventBus.subscribe(ProjectVersionChangedEvent.class, this::receiveVersionChangedEvent);
+		eventBus.subscribe(ReportsSelectedEvent.class, this::receiveReportsSelectedEvent);
 	}
 
-	public void setProject(final Project project) {
-		this.project = project;
-		UIEventBus.getInstance().publish(new ProjectChangedEvent(project));
+	public void receiveReportsSelectedEvent(final ReportsSelectedEvent event) {
+		setSelectedReports(event.getReports());
 	}
 
-	public ProjectVersion getProjectVersion() {
-		return projectVersion;
+	public void receiveProjectChangedEvent(final ProjectChangedEvent event) {
+		setSelectedReports(null);
 	}
 
-	public void setProjectVersion(final ProjectVersion projectVersion) {
-		this.projectVersion = projectVersion;
-		UIEventBus.getInstance().publish(new ProjectVersionChangedEvent(projectVersion));
+	public void receiveVersionChangedEvent(final ProjectVersionChangedEvent event) {
+		setSelectedReports(null);
 	}
 
 	public Report getReport() {
@@ -72,6 +71,23 @@ public class BugrapApplicationModel {
 		}
 
 		return massModificationReport;
+	}
+
+	public void updateSelectedReport() {
+		if (isSingleModificationModeSelected()) {
+			report = BugrapFacade.getInstance().save(report);
+			UIEventBus.getInstance().publish(new ReportsUpdatedEvent(report));
+		} else {
+			for (final Report report : reports) {
+				setPropertyIfNotNull(massModificationReport::getPriority, report::setPriority);
+				setPropertyIfNotNull(massModificationReport::getType, report::setType);
+				setPropertyIfNotNull(massModificationReport::getStatus, report::setStatus);
+				setPropertyIfNotNull(massModificationReport::getAssigned, report::setAssigned);
+				setPropertyIfNotNull(massModificationReport::getVersion, report::setVersion);
+				BugrapFacade.getInstance().save(report);
+			}
+			UIEventBus.getInstance().publish(new ReportsUpdatedEvent(reports));
+		}
 	}
 
 	public void setSelectedReports(final Set<Report> selectedReports) {
@@ -91,57 +107,19 @@ public class BugrapApplicationModel {
 		this.report = report;
 		this.reports = null;
 		this.massModificationReport = null;
-		UIEventBus.getInstance().publish(new ReportSelectedEvent(report));
 	}
 
 	private void setMassModificationMode(final Set<Report> reports) {
 		this.reports = reports;
 		report = null;
 		massModificationReport = new Report();
+		massModificationReport.setProject(reports.iterator().next().getProject());
 		massModificationReport.setSummary(String.format(MASS_MODE_REPORT_TITLE, reports.size()));
 		setPropertyIfUniqueValue(reports, Report::getPriority, massModificationReport::setPriority);
 		setPropertyIfUniqueValue(reports, Report::getType, massModificationReport::setType);
 		setPropertyIfUniqueValue(reports, Report::getStatus, massModificationReport::setStatus);
 		setPropertyIfUniqueValue(reports, Report::getAssigned, massModificationReport::setAssigned);
 		setPropertyIfUniqueValue(reports, Report::getVersion, massModificationReport::setVersion);
-		UIEventBus.getInstance().publish(new ReportSelectedEvent(massModificationReport));
-	}
-
-	public List<Project> listProjects() {
-		final List<Project> projects = new ArrayList<>(BugrapFacade.getInstance().findProjects());
-		Collections.sort(projects);
-		return projects;
-	}
-
-	public List<ProjectVersion> listProjectVersions() {
-
-		if (project == null) {
-			return Collections.emptyList();
-		}
-
-		final List<ProjectVersion> projectVersions = new ArrayList<>(
-				BugrapFacade.getInstance().findProjectVersions(project));
-		Collections.sort(projectVersions);
-		return projectVersions;
-	}
-
-	public List<Report> listReports() {
-		final ReportsQuery query = new ReportsQuery();
-		query.project = project;
-		query.projectVersion = projectVersion;
-
-		return new ArrayList<>(BugrapFacade.getInstance().findReports(query));
-	}
-
-	public boolean isAllVersionsSelected() {
-		return projectVersion == null;
-	}
-
-	public String getAssignedTo(final Reporter reporter) {
-		if (reporter == null) {
-			return null;
-		}
-		return reporter.getName();
 	}
 
 	public boolean isSingleModificationModeSelected() {
@@ -150,6 +128,18 @@ public class BugrapApplicationModel {
 
 	public boolean isMassModificationModeSelected() {
 		return reports != null;
+	}
+
+	public List<ProjectVersion> listProjectVersions() {
+
+		if (getReport() == null) {
+			return Collections.emptyList();
+		}
+
+		final List<ProjectVersion> projectVersions = new ArrayList<>(
+				BugrapFacade.getInstance().findProjectVersions(getReport().getProject()));
+		Collections.sort(projectVersions);
+		return projectVersions;
 	}
 
 	public List<Priority> listPriorities() {
@@ -168,23 +158,6 @@ public class BugrapApplicationModel {
 		final List<Reporter> reporters = new ArrayList<>(BugrapFacade.getInstance().findReporters());
 		Collections.sort(reporters, REPORTER_COMPARATOR);
 		return reporters;
-	}
-
-	public void updateSelectedReport() {
-		if (isSingleModificationModeSelected()) {
-			BugrapFacade.getInstance().save(report);
-			UIEventBus.getInstance().publish(new ReportsUpdatedEvent(report));
-		} else {
-			for (final Report report : reports) {
-				setPropertyIfNotNull(massModificationReport::getPriority, report::setPriority);
-				setPropertyIfNotNull(massModificationReport::getType, report::setType);
-				setPropertyIfNotNull(massModificationReport::getStatus, report::setStatus);
-				setPropertyIfNotNull(massModificationReport::getAssigned, report::setAssigned);
-				setPropertyIfNotNull(massModificationReport::getVersion, report::setVersion);
-				BugrapFacade.getInstance().save(report);
-			}
-			UIEventBus.getInstance().publish(new ReportsUpdatedEvent(reports));
-		}
 	}
 
 	public boolean isShowReportView() {
@@ -213,4 +186,19 @@ public class BugrapApplicationModel {
 		}
 	}
 
+	public void setSelectReportById(final String reportIdParam) {
+		final Long reportId = Long.valueOf(reportIdParam);
+		if (reportId == null) {
+			throw new IllegalArgumentException(String.format("Invalid reportId param: %s.", reportIdParam));
+		}
+
+		final Report report = BugrapFacade.getInstance().getReportById(reportId);
+		if (report == null) {
+			throw new IllegalArgumentException(String.format("Report ID not found: %d.", reportId));
+		}
+
+		final Set<Report> selectedReports = new HashSet<>(ONE);
+		selectedReports.add(report);
+		UIEventBus.getInstance().publish(new ReportsSelectedEvent(selectedReports));
+	}
 }

@@ -9,8 +9,6 @@ public class PriorityFormat {
 	private static final Logger LOGGER = Logger.getLogger(PriorityFormat.class.getName());
 	private static final String MSG_UNKOWN_PRIORITY = "Unkown priority to format: '%s'.";
 
-	private static final PriorityFormat INSTANCE = new PriorityFormat();
-
 	private static final String PRIORITY_BAR_HTML = "<div class=\"priority-bar\"></div>";
 
 	private static final int ONE = 1;
@@ -30,11 +28,7 @@ public class PriorityFormat {
 	private PriorityFormat() {
 	}
 
-	public static PriorityFormat getInstance() {
-		return INSTANCE;
-	}
-
-	public String format(final Priority priority) {
+	public static String format(final Priority priority) {
 
 		if (priority == null) {
 			return null;

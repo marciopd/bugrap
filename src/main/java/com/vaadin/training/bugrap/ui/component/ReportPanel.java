@@ -1,27 +1,41 @@
-package com.vaadin.training.bugrap.ui;
+package com.vaadin.training.bugrap.ui.component;
 
 import org.vaadin.bugrap.domain.entities.Report;
 import org.vaadin.bugrap.domain.entities.Reporter;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
+import com.vaadin.server.BrowserWindowOpener;
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.training.bugrap.eventbus.UIEventBus;
 import com.vaadin.training.bugrap.scope.UIScope;
-import com.vaadin.training.bugrap.ui.component.Comment;
+import com.vaadin.training.bugrap.ui.ReportsOverviewUI;
+import com.vaadin.training.bugrap.ui.events.ReportsSelectedEvent;
+import com.vaadin.training.bugrap.ui.model.Models;
+import com.vaadin.training.bugrap.ui.model.ReportViewModel;
 
-public class ReportView extends ReportViewDesign {
+public class ReportPanel extends ReportPanelDesign {
 
 	private static final long serialVersionUID = 1790972443114757675L;
+	private static final String REPORT_ID_PARAM = "reportId";
 	private static final String FIRST_COMMENT_STYLE = "first-comment";
 
 	private Binder<Report> reportBinder;
 
-	public ReportView() {
+	public ReportPanel() {
 		initUpdateButton();
 		initRevertButton();
+		initOpenWindowButton();
+		UIEventBus.getInstance().subscribe(ReportsSelectedEvent.class, this::receiveReportSelectedEvent);
 	}
 
 	public void initialize() {
-		final BugrapApplicationModel applicationModel = getApplicationModel();
+
+		final ReportViewModel applicationModel = getApplicationModel();
+		if (!applicationModel.isShowReportView()) {
+			setVisible(false);
+			return;
+		}
 
 		final Report report = applicationModel.getReport();
 		reportSummaryLabel.setValue(report.getSummary());
@@ -30,15 +44,22 @@ public class ReportView extends ReportViewDesign {
 			openNewWindowButton.setVisible(false);
 			commentsPanel.setVisible(false);
 		} else {
+			configOpenWindowReportId(applicationModel);
 			openNewWindowButton.setVisible(true);
 			initComments(report);
 		}
 
 		initComboBoxes(applicationModel);
 		initReportBinder(report);
+		setVisible(true);
 	}
 
-	private void initComboBoxes(final BugrapApplicationModel applicationModel) {
+	private void configOpenWindowReportId(final ReportViewModel applicationModel) {
+		final BrowserWindowOpener opener = (BrowserWindowOpener) openNewWindowButton.getExtensions().iterator().next();
+		opener.setParameter(REPORT_ID_PARAM, String.valueOf(applicationModel.getReport().getId()));
+	}
+
+	private void initComboBoxes(final ReportViewModel applicationModel) {
 		prioritySelect.clear();
 		prioritySelect.setItems(applicationModel.listPriorities());
 
@@ -83,6 +104,11 @@ public class ReportView extends ReportViewDesign {
 		});
 	}
 
+	private void initOpenWindowButton() {
+		final BrowserWindowOpener opener = new BrowserWindowOpener(ReportsOverviewUI.class);
+		opener.extend(openNewWindowButton);
+	}
+
 	private void initReportBinder(final Report report) {
 		if (reportBinder == null) {
 			reportBinder = new Binder<Report>(Report.class);
@@ -102,7 +128,16 @@ public class ReportView extends ReportViewDesign {
 		return author.getName();
 	}
 
-	private BugrapApplicationModel getApplicationModel() {
-		return UIScope.getCurrent().getProperty(Models.BUGRAP_MODEL);
+	private ReportViewModel getApplicationModel() {
+		return UIScope.getCurrent().getProperty(Models.REPORT_VIEW_MODEL);
+	}
+
+	public void receiveReportSelectedEvent(final ReportsSelectedEvent reportSelectedEvent) {
+		initialize();
+	}
+
+	public void setReportFromRequestParam() {
+		final String reportIdParam = VaadinRequest.getCurrent().getParameter(REPORT_ID_PARAM);
+		getApplicationModel().setSelectReportById(reportIdParam);
 	}
 }

@@ -1,4 +1,4 @@
-package com.vaadin.training.bugrap.ui;
+package com.vaadin.training.bugrap.ui.view;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,8 +16,11 @@ import com.vaadin.training.bugrap.eventbus.UIEventBus;
 import com.vaadin.training.bugrap.scope.UIScope;
 import com.vaadin.training.bugrap.ui.events.ProjectChangedEvent;
 import com.vaadin.training.bugrap.ui.events.ProjectVersionChangedEvent;
-import com.vaadin.training.bugrap.ui.events.ReportSelectedEvent;
 import com.vaadin.training.bugrap.ui.events.ReportsUpdatedEvent;
+import com.vaadin.training.bugrap.ui.model.MainViewModel;
+import com.vaadin.training.bugrap.ui.model.Messages;
+import com.vaadin.training.bugrap.ui.model.Models;
+import com.vaadin.training.bugrap.ui.model.UserModel;
 import com.vaadin.training.bugrap.util.ElapsedTimeFormat;
 import com.vaadin.training.bugrap.util.PriorityFormat;
 import com.vaadin.ui.Grid.Column;
@@ -32,10 +35,10 @@ public class MainView extends MainViewDesign implements View {
 	@Override
 	public void enter(final ViewChangeEvent event) {
 
-		username.setCaption(UserController.getInstance().getUsername());
+		username.setCaption(UserModel.getInstance().getUsername());
 
 		logoutButton.addClickListener(clickEvent -> {
-			UserController.getInstance().logout();
+			UserModel.getInstance().logout();
 			getUI().getNavigator().navigateTo(Views.LOGIN);
 		});
 
@@ -52,13 +55,12 @@ public class MainView extends MainViewDesign implements View {
 		final EventBus eventBus = UIEventBus.getInstance();
 		eventBus.subscribe(ProjectChangedEvent.class, this::receiveProjectChangedEvent);
 		eventBus.subscribe(ProjectVersionChangedEvent.class, this::receiveVersionChangedEvent);
-		eventBus.subscribe(ReportSelectedEvent.class, this::receiveReportSelectedEvent);
 		eventBus.subscribe(ReportsUpdatedEvent.class, this::receiveReportUpdatedEvent);
 	}
 
 	private void initReportsGrid() {
 
-		final BugrapApplicationModel applicationModel = getApplicationModel();
+		final MainViewModel applicationModel = getApplicationModel();
 		final List<Report> reports = applicationModel.listReports();
 
 		if (!reports.isEmpty()) {
@@ -73,7 +75,7 @@ public class MainView extends MainViewDesign implements View {
 			}
 
 			final Column<Report, String> priorityColumn = reportsGrid
-					.addColumn(report -> PriorityFormat.getInstance().format(report.getPriority()), new HtmlRenderer())
+					.addColumn(report -> PriorityFormat.format(report.getPriority()), new HtmlRenderer())
 					.setCaption("PRIORITY");
 			sortOrderBuilder.thenDesc(priorityColumn);
 			reportsGrid.addColumn(Report::getType).setCaption("TYPE");
@@ -101,21 +103,20 @@ public class MainView extends MainViewDesign implements View {
 
 	private void initProjectVersions() {
 		projectVersionsSelect.setValue(null);
-		final BugrapApplicationModel applicationModel = getApplicationModel();
+		final MainViewModel applicationModel = getApplicationModel();
 		projectVersionsSelect.setItems(applicationModel.listProjectVersions());
-		applicationModel.setProjectVersion(null);
 
 		projectVersionsSelect.addSelectionListener(event -> {
 			applicationModel.setProjectVersion(event.getValue());
 		});
 	}
 
-	private BugrapApplicationModel getApplicationModel() {
-		return UIScope.getCurrent().getProperty(Models.BUGRAP_MODEL);
+	private MainViewModel getApplicationModel() {
+		return UIScope.getCurrent().getProperty(Models.MAIN_VIEW_MODEL);
 	}
 
 	private void initProjectSelect() {
-		final BugrapApplicationModel applicationModel = getApplicationModel();
+		final MainViewModel applicationModel = getApplicationModel();
 		final List<Project> projects = applicationModel.listProjects();
 		projectSelect.setItems(projects);
 		projectSelect.addSelectionListener(event -> {
@@ -136,29 +137,22 @@ public class MainView extends MainViewDesign implements View {
 	}
 
 	private void initReportView() {
-		reportView.setVisible(false);
-
-		final BugrapApplicationModel applicationModel = getApplicationModel();
-		if (applicationModel.isShowReportView()) {
-			reportView.initialize();
-			reportView.setVisible(true);
-		}
+		reportPanel.initialize();
 	}
 
 	public void receiveProjectChangedEvent(final ProjectChangedEvent event) {
 		initProjectVersions();
 		initReportsGrid();
+		initReportView();
 	}
 
 	public void receiveVersionChangedEvent(final ProjectVersionChangedEvent event) {
 		initReportsGrid();
-	}
-
-	public void receiveReportSelectedEvent(final ReportSelectedEvent reportSelectedEvent) {
 		initReportView();
 	}
 
 	public void receiveReportUpdatedEvent(final ReportsUpdatedEvent event) {
 		initReportsGrid();
+		initReportView();
 	}
 }

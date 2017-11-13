@@ -1,6 +1,6 @@
 package com.vaadin.training.bugrap.eventbus;
 
-import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -47,7 +47,7 @@ public class EventBus {
 	private synchronized <T> Set<Subscriber> createSubscribersListSafely(final Class<T> event) {
 		Set<Subscriber> subscribers = subscribersPerEventType.get(event);
 		if (subscribers == null) {
-			subscribers = Collections.newSetFromMap(new ConcurrentHashMap<>(SUBSCRIBERS_LIST_INITIAL_SIZE));
+			subscribers = new LinkedHashSet<>(SUBSCRIBERS_LIST_INITIAL_SIZE);
 		}
 		return subscribers;
 	}
