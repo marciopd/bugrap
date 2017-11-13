@@ -15152,13 +15152,11 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .comment {
+	padding-top: 5px;
 	padding-left: 15px;
 	padding-right: 15px;
+	min-height: 90px;
 	border-bottom: 1px solid gray;
-}
-
-.mytheme .comment {
-	padding-top: 5px;
 }
 
 .mytheme .first-comment {
@@ -15177,4 +15175,13 @@ div.v-layout.v-horizontal.v-widget {
 	margin-top: -15px;
 	padding-left: 25px;
 	padding-bottom: 10px;
+}
+
+.mytheme .add-comment-panel {
+	border-top: 1px solid gray;
+	background-color: lightgray;
+}
+
+.mytheme .comment-text-area {
+	margin-top: -10px;
 }

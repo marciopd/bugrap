@@ -22,7 +22,7 @@ public class ElapsedTimeFormat {
 	private static final int ONE_HOUR_IN_SECONDS = 3600;
 	private static final int ONE_WEEK_IN_DAYS = 7;
 	private static final int ZERO = 0;
-	private static final String LABEL_JUST_NOW = " just now";
+	private static final String LABEL_JUST_NOW = "just now";
 
 	public static String format(final Date timestamp) {
 

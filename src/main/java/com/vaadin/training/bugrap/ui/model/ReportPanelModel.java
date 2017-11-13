@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.vaadin.bugrap.domain.entities.Comment;
 import org.vaadin.bugrap.domain.entities.ProjectVersion;
 import org.vaadin.bugrap.domain.entities.Report;
 import org.vaadin.bugrap.domain.entities.Report.Priority;
@@ -27,7 +28,7 @@ import com.vaadin.training.bugrap.ui.events.ProjectVersionChangedEvent;
 import com.vaadin.training.bugrap.ui.events.ReportsSelectedEvent;
 import com.vaadin.training.bugrap.ui.events.ReportsUpdatedEvent;
 
-public class ReportViewModel {
+public class ReportPanelModel {
 
 	private static final int ONE = 1;
 	private static final String MASS_MODE_REPORT_TITLE = "%d reports selected";
@@ -46,7 +47,7 @@ public class ReportViewModel {
 	private Set<Report> reports;
 	private Report massModificationReport;
 
-	public ReportViewModel() {
+	public ReportPanelModel() {
 		final EventBus eventBus = UIEventBus.getInstance();
 		eventBus.subscribe(ProjectChangedEvent.class, this::receiveProjectChangedEvent);
 		eventBus.subscribe(ProjectVersionChangedEvent.class, this::receiveVersionChangedEvent);
@@ -200,5 +201,18 @@ public class ReportViewModel {
 		final Set<Report> selectedReports = new HashSet<>(ONE);
 		selectedReports.add(report);
 		UIEventBus.getInstance().publish(new ReportsSelectedEvent(selectedReports));
+	}
+
+	public void addComment() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public List<Comment> getReportComments() {
+		if (report == null) {
+			return Collections.emptyList();
+		}
+
+		return BugrapFacade.getInstance().findComments(report);
 	}
 }
