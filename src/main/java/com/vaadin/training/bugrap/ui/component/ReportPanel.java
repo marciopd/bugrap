@@ -1,5 +1,8 @@
 package com.vaadin.training.bugrap.ui.component;
 
+import java.util.List;
+
+import org.vaadin.bugrap.domain.entities.Comment;
 import org.vaadin.bugrap.domain.entities.Report;
 import org.vaadin.bugrap.domain.entities.Reporter;
 
@@ -10,9 +13,11 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.training.bugrap.eventbus.UIEventBus;
 import com.vaadin.training.bugrap.scope.UIScope;
 import com.vaadin.training.bugrap.ui.ReportsOverviewUI;
+import com.vaadin.training.bugrap.ui.events.CommentAddedEvent;
 import com.vaadin.training.bugrap.ui.events.ReportsSelectedEvent;
 import com.vaadin.training.bugrap.ui.model.Models;
-import com.vaadin.training.bugrap.ui.model.ReportViewModel;
+import com.vaadin.training.bugrap.ui.model.ReportPanelModel;
+import com.vaadin.training.bugrap.ui.model.UserModel;
 
 public class ReportPanel extends ReportPanelDesign {
 
@@ -27,11 +32,12 @@ public class ReportPanel extends ReportPanelDesign {
 		initRevertButton();
 		initOpenWindowButton();
 		UIEventBus.getInstance().subscribe(ReportsSelectedEvent.class, this::receiveReportSelectedEvent);
+		UIEventBus.getInstance().subscribe(CommentAddedEvent.class, this::receiveCommentAddedEvent);
 	}
 
 	public void initialize() {
 
-		final ReportViewModel applicationModel = getApplicationModel();
+		final ReportPanelModel applicationModel = getApplicationModel();
 		if (!applicationModel.isShowReportView()) {
 			setVisible(false);
 			return;
@@ -43,10 +49,12 @@ public class ReportPanel extends ReportPanelDesign {
 		if (applicationModel.isMassModificationModeSelected()) {
 			openNewWindowButton.setVisible(false);
 			commentsPanel.setVisible(false);
+			addCommentPanel.setVisible(false);
 		} else {
 			configOpenWindowReportId(applicationModel);
 			openNewWindowButton.setVisible(true);
-			initComments(report);
+			initCommentsPanel();
+			initAddCommentPanel();
 		}
 
 		initComboBoxes(applicationModel);
@@ -54,12 +62,21 @@ public class ReportPanel extends ReportPanelDesign {
 		setVisible(true);
 	}
 
-	private void configOpenWindowReportId(final ReportViewModel applicationModel) {
+	private void initAddCommentPanel() {
+		addCommentPanel.initialize(getLoggedInUser(), getApplicationModel().getReport());
+		addCommentPanel.setVisible(true);
+	}
+
+	private Reporter getLoggedInUser() {
+		return UserModel.getInstance().getUser();
+	}
+
+	private void configOpenWindowReportId(final ReportPanelModel applicationModel) {
 		final BrowserWindowOpener opener = (BrowserWindowOpener) openNewWindowButton.getExtensions().iterator().next();
 		opener.setParameter(REPORT_ID_PARAM, String.valueOf(applicationModel.getReport().getId()));
 	}
 
-	private void initComboBoxes(final ReportViewModel applicationModel) {
+	private void initComboBoxes(final ReportPanelModel applicationModel) {
 		prioritySelect.clear();
 		prioritySelect.setItems(applicationModel.listPriorities());
 
@@ -76,13 +93,19 @@ public class ReportPanel extends ReportPanelDesign {
 		versionSelect.setItems(applicationModel.listProjectVersions());
 	}
 
-	private void initComments(final Report report) {
+	private void initCommentsPanel() {
+		final Report report = getApplicationModel().getReport();
 		commentsLayout.removeAllComponents();
 
-		final Comment reportDescriptionComment = new Comment(getName(report.getAuthor()), report.getReportedTimestamp(),
+		final CommentPanel reportDescriptionComment = new CommentPanel(getName(report.getAuthor()), report.getReportedTimestamp(),
 				report.getDescription());
 		reportDescriptionComment.addStyleName(FIRST_COMMENT_STYLE);
 		commentsLayout.addComponent(reportDescriptionComment);
+
+		final List<Comment> reportComments = getApplicationModel().getReportComments();
+		for (final Comment comment : reportComments) {
+			commentsLayout.addComponent(new CommentPanel(comment));
+		}
 
 		commentsPanel.setVisible(true);
 	}
@@ -128,12 +151,17 @@ public class ReportPanel extends ReportPanelDesign {
 		return author.getName();
 	}
 
-	private ReportViewModel getApplicationModel() {
-		return UIScope.getCurrent().getProperty(Models.REPORT_VIEW_MODEL);
+	private ReportPanelModel getApplicationModel() {
+		return UIScope.getCurrent().getProperty(Models.REPORT_PANEL_MODEL);
 	}
 
 	public void receiveReportSelectedEvent(final ReportsSelectedEvent reportSelectedEvent) {
 		initialize();
+	}
+
+	public void receiveCommentAddedEvent(final CommentAddedEvent event) {
+		commentsLayout.addComponent(new CommentPanel(event.getComment()));
+		commentsPanel.setScrollTop(Integer.MAX_VALUE);
 	}
 
 	public void setReportFromRequestParam() {

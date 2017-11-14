@@ -14,7 +14,7 @@ import com.vaadin.training.bugrap.scope.ScopeHolder;
 import com.vaadin.training.bugrap.scope.UIScope;
 import com.vaadin.training.bugrap.ui.model.MainViewModel;
 import com.vaadin.training.bugrap.ui.model.Models;
-import com.vaadin.training.bugrap.ui.model.ReportViewModel;
+import com.vaadin.training.bugrap.ui.model.ReportPanelModel;
 import com.vaadin.training.bugrap.ui.model.UserModel;
 import com.vaadin.training.bugrap.ui.view.LoginForm;
 import com.vaadin.training.bugrap.ui.view.MainView;
@@ -46,7 +46,7 @@ public class MainUI extends UI implements ScopeHolder {
 
 	private void initializeModel() {
 		scope.setProperty(Models.MAIN_VIEW_MODEL, new MainViewModel());
-		scope.setProperty(Models.REPORT_VIEW_MODEL, new ReportViewModel());
+		scope.setProperty(Models.REPORT_PANEL_MODEL, new ReportPanelModel());
 	}
 
 	private void initializeViews() {
