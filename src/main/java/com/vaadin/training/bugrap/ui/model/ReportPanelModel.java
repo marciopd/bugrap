@@ -203,11 +203,6 @@ public class ReportPanelModel {
 		UIEventBus.getInstance().publish(new ReportsSelectedEvent(selectedReports));
 	}
 
-	public void addComment() {
-		// TODO Auto-generated method stub
-
-	}
-
 	public List<Comment> getReportComments() {
 		if (report == null) {
 			return Collections.emptyList();

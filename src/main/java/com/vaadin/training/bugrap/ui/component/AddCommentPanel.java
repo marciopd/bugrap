@@ -27,6 +27,7 @@ public class AddCommentPanel extends AddCommentPanelDesign {
 	}
 
 	private void initDoneButton() {
+		doneButton.setEnabled(false);
 		doneButton.addClickListener(event -> {
 			getApplicationModel().saveComment();
 			clearInputFields();
@@ -35,7 +36,13 @@ public class AddCommentPanel extends AddCommentPanelDesign {
 
 	private void initCommentTextArea() {
 		commentTextArea.addValueChangeListener(event -> {
-			getApplicationModel().setCommentText(event.getValue());
+			final String comment = event.getValue();
+			getApplicationModel().setCommentText(comment);
+			if (comment != null && !comment.isEmpty()) {
+				doneButton.setEnabled(true);
+			} else {
+				doneButton.setEnabled(false);
+			}
 		});
 	}
 
