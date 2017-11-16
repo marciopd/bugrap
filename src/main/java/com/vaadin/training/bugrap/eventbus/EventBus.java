@@ -52,4 +52,8 @@ public class EventBus {
 		return subscribers;
 	}
 
+	public void removeAllSubscribers() {
+		subscribersPerEventType.clear();
+	}
+
 }

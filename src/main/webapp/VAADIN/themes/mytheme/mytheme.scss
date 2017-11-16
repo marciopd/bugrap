@@ -160,4 +160,41 @@
   .comment-text-area {
 	margin-top: -10px;
   }
+  
+  .v-slot-hidden-upload-button {
+  	display: none;
+  }
+  
+  .attachments-bar {
+  	background-color: #eff2f7;
+  	border-radius: 10px;
+  	float: left;
+  	min-height: 40px;
+  	width: 100%;
+  	padding: 10px;
+  }
+  
+  .comment-attachment {
+  	border-radius: 10px;
+  	padding-left: 10px;
+  	padding-right: 10px;
+  	color: lightgray;
+  }
+  
+  .comment-attachment:hover {
+  	background-color: gray;
+  	color: white;
+  }  
+  
+  .comment-attachment-complete {
+    	border-radius: 10px;
+  	padding-left: 10px;
+  	padding-right: 10px;
+  	color: #464646;
+  }
+  
+  .comment-attachment-complete:hover {
+  	background-color: gray;
+  	color: white;
+  }
 }
