@@ -13,7 +13,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.training.bugrap.eventbus.UIEventBus;
 import com.vaadin.training.bugrap.scope.UIScope;
 import com.vaadin.training.bugrap.ui.ReportsOverviewUI;
-import com.vaadin.training.bugrap.ui.events.CommentAddedEvent;
+import com.vaadin.training.bugrap.ui.events.CommentsAddedEvent;
 import com.vaadin.training.bugrap.ui.events.ReportsSelectedEvent;
 import com.vaadin.training.bugrap.ui.model.Models;
 import com.vaadin.training.bugrap.ui.model.ReportPanelModel;
@@ -32,7 +32,7 @@ public class ReportPanel extends ReportPanelDesign {
 		initRevertButton();
 		initOpenWindowButton();
 		UIEventBus.getInstance().subscribe(ReportsSelectedEvent.class, this::receiveReportSelectedEvent);
-		UIEventBus.getInstance().subscribe(CommentAddedEvent.class, this::receiveCommentAddedEvent);
+		UIEventBus.getInstance().subscribe(CommentsAddedEvent.class, this::receiveCommentAddedEvent);
 	}
 
 	public void initialize() {
@@ -159,8 +159,11 @@ public class ReportPanel extends ReportPanelDesign {
 		initialize();
 	}
 
-	public void receiveCommentAddedEvent(final CommentAddedEvent event) {
-		commentsLayout.addComponent(new CommentPanel(event.getComment()));
+	public void receiveCommentAddedEvent(final CommentsAddedEvent event) {
+		final List<Comment> comments = event.getComments();
+		for (final Comment comment : comments) {
+			commentsLayout.addComponent(new CommentPanel(comment));
+		}
 		commentsPanel.setScrollTop(Integer.MAX_VALUE);
 	}
 

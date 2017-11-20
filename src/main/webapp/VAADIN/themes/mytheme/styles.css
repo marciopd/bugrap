@@ -15185,3 +15185,40 @@ div.v-layout.v-horizontal.v-widget {
 .mytheme .comment-text-area {
 	margin-top: -10px;
 }
+
+.mytheme .v-slot-hidden-upload-button {
+	display: none;
+}
+
+.mytheme .attachments-bar {
+	background-color: #eff2f7;
+	border-radius: 10px;
+	float: left;
+	min-height: 40px;
+	width: 100%;
+	padding: 10px;
+}
+
+.mytheme .comment-attachment {
+	border-radius: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: lightgray;
+}
+
+.mytheme .comment-attachment:hover {
+	background-color: gray;
+	color: white;
+}
+
+.mytheme .comment-attachment-complete {
+	border-radius: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: #464646;
+}
+
+.mytheme .comment-attachment-complete:hover {
+	background-color: gray;
+	color: white;
+}

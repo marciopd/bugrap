@@ -1,6 +1,7 @@
 package com.vaadin.training.bugrap.model;
 
 import org.vaadin.bugrap.domain.BugrapRepository;
+import org.vaadin.bugrap.domain.entities.Comment;
 
 public class BugrapFacade extends BugrapRepository {
 
@@ -15,5 +16,12 @@ public class BugrapFacade extends BugrapRepository {
 
 	public static BugrapFacade getInstance() {
 		return INSTANCE;
+	}
+
+	@Override
+	public Comment save(final Comment comment) {
+		final Comment persistedComment = super.save(comment);
+		comment.setId(persistedComment.getId());
+		return persistedComment;
 	}
 }

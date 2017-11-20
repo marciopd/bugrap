@@ -6,15 +6,16 @@
   <meta name="vaadin-version" content="8.0.5">
  </head>
  <body>
-  <vaadin-vertical-layout style-name="add-comment-panel" height="347px" _id="addCommentPanel">
-   <vaadin-text-area style-name="comment-text-area" placeholder="Write a new comment..." width-full height="240px" _id="commentTextArea" :expand></vaadin-text-area>
+  <vaadin-vertical-layout style-name="add-comment-panel" height="400px">
+   <vaadin-text-area style-name="comment-text-area" placeholder="Write a new comment..." size-full _id="commentTextArea" :expand></vaadin-text-area>
+   <vaadin-css-layout style-name="attachments-bar" width-full _id="attachmentsBar"></vaadin-css-layout>
    <vaadin-horizontal-layout width="35.78%">
     <vaadin-button style-name="primary" width="73px" plain-text _id="doneButton">
       Done 
     </vaadin-button>
-    <vaadin-button width="134px" plain-text _id="attachmentButton" :expand>
-      Attachment... 
-    </vaadin-button>
+    <vaadin-css-layout _id="attachmentButtonContainer" :expand>
+     <vaadin-upload button-caption="Attachment..." _id="attachmentButton"></vaadin-upload>
+    </vaadin-css-layout>
     <vaadin-button style-name="tiny" width="83px" plain-text _id="cancelButton" :middle>
       Cancel 
     </vaadin-button>
