@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Date;
 
 import org.vaadin.bugrap.domain.entities.Comment;
+import org.vaadin.bugrap.domain.entities.Reporter;
 
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.Resource;
@@ -22,6 +23,7 @@ public class CommentPanel extends CommentPanelDesign {
 
 	private static final String AUTHOR_TEMPLATE = "%s (%s)";
 	private static final String ANONYMOUS = "Anonymous";
+	private static final Reporter EMPTY_AUTHOR = new Reporter();
 
 	public CommentPanel(final String authorName, final Date timestamp, final String description) {
 		userNameLabel
@@ -37,9 +39,18 @@ public class CommentPanel extends CommentPanelDesign {
 
 	public CommentPanel(final Comment comment) {
 		userNameLabel
-				.setCaption(String.format(AUTHOR_TEMPLATE, getName(comment.getAuthor().getName()),
+				.setCaption(String.format(AUTHOR_TEMPLATE, getName(getAuthor(comment).getName()),
 						ElapsedTimeFormat.format(comment.getTimestamp())));
 		initDescription(comment);
+	}
+
+	private Reporter getAuthor(final Comment comment) {
+		final Reporter author = comment.getAuthor();
+		if (author == null) {
+			return EMPTY_AUTHOR;
+		}
+
+		return author;
 	}
 
 	private void initDescription(final Comment comment) {
