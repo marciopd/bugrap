@@ -19,7 +19,7 @@ import com.vaadin.ui.declarative.Design;
 @SuppressWarnings("serial")
 public class CommentPanelDesign extends CssLayout {
 	protected Label userNameLabel;
-	protected Label descriptionLabel;
+	protected CssLayout descriptionContainer;
 
 	public CommentPanelDesign() {
 		Design.read(this);
